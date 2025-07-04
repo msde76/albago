@@ -1,6 +1,5 @@
 package backend.albago.domain.team.api;
 
-import backend.albago.domain.team.application.TeamPostService;
 import backend.albago.domain.team.application.TeamService;
 import backend.albago.domain.team.dto.TeamRequestDTO;
 import backend.albago.domain.team.dto.TeamResponseDTO;

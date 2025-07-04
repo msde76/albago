@@ -33,7 +33,7 @@ public class Team extends BaseEntity {
     private String color;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "memberId", nullable = false)
     private Member ownerMember;
 
     private boolean weeklyAllowance;
