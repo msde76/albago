@@ -1,5 +1,8 @@
 package backend.albago.global.exception;
 
+import backend.albago.global.common.response.BaseResponse;
+import backend.albago.global.error.code.status.BaseErrorCode;
+import backend.albago.global.error.code.status.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +19,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import study.goorm.global.common.response.BaseResponse;
-import study.goorm.global.error.code.status.BaseErrorCode;
-import study.goorm.global.error.code.status.ErrorStatus;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

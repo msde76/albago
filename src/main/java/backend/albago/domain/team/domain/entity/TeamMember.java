@@ -31,6 +31,8 @@ public class TeamMember extends BaseEntity {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private PositionStatus position;
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10, 2) default 0.00")
@@ -44,4 +46,7 @@ public class TeamMember extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean isAccepted = false;
+
+    @Column(length = 7)
+    private String color;
 }

@@ -26,10 +26,34 @@ public class Team extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String teamName;
 
+    @Column(length = 1000)
+    private String imageUrl;
+
+    @Column(nullable = false, length = 100)
+    private String color;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    private Member ownerMember;
 
+    private boolean weeklyAllowance;
+
+    private boolean nightAllowance;
+    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
+    private BigDecimal nightRate = BigDecimal.ONE;
+
+    private boolean overtimeAllowance;
+    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
+    private BigDecimal overtimeRate = BigDecimal.ONE;
+
+    private boolean holidayAllowance;
+    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
+    private BigDecimal holidayRate = BigDecimal.ONE;
+
+    @Column(length = 255)
+    private String deductions;
+
+    // 임금 지불 방식 (기존 컬럼들 유지)
     @Column(name = "pay_daily", columnDefinition = "DECIMAL(10, 2) default 0.00")
     private BigDecimal dailyPay = BigDecimal.ZERO;
 

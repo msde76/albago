@@ -11,6 +11,18 @@ public enum SuccessStatus implements BaseCode {
     //Common
     OK(HttpStatus.OK, "COMMON_200", "성공입니다."),
 
+    //TEAM
+    TEAM_CREATED(HttpStatus.CREATED, "TEAM_200", "팀이 성공적으로 조회되었습니다."),
+    TEAM_LIST_FINED(HttpStatus.OK, "TEAM_201", "팀 목록이 성공적으로 조회되었습니다."),
+    TEAM_FINED(HttpStatus.OK, "TEAM_202", "팀 정보가 성공적으로 조회되었습니다."),
+    TEAM_UPDATE(HttpStatus.OK, "TEAM_203", "팀 정보가 성공적으로 수정되었습니다."),
+    TEAM_DELETE(HttpStatus.OK, "TEAM_204", "팀이 성공적으로 삭제되었습니다."),
+    TEAM_INVITE(HttpStatus.OK, "TEAM_205", "팀에 성공적으로 초대되었습니다."),
+    TEAM_MEMBER_UPDATE(HttpStatus.OK, "TEAM_206", "팀 멤버 정보가 성공적으로 수정되었습니다."),
+    TEAM_MEMBER_DELETE(HttpStatus.OK, "TEAM_207", "팀 멤버가 성공적으로 삭제되었습니다."),
+    TEAM_INVITE_ACCEPT(HttpStatus.OK, "TEAM_208", "초대가 성공적으로 수락되었습니다."),
+    TEAM_INVITE_REJECT(HttpStatus.OK, "TEAM_209", "초대가 성공적으로 거절되었습니다."),
+
     //Cloth
     CLOTH_VIEW_SUCCESS(HttpStatus.OK,"CLOTH_200","옷이 성공적으로 조회되었습니다."),
     CLOTH_CREATED(HttpStatus.CREATED, "CLOTH_201"," 옷이 성공적으로 생성되었습니다."),

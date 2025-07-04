@@ -14,13 +14,21 @@ public enum ErrorStatus implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
-    // Cloth
-    NO_SUCH_CLOTH(HttpStatus.BAD_REQUEST, "CLOTH_4001","옷이 존재하지 않습니다"),
-    NO_ClOTH_IMAGE(HttpStatus.BAD_REQUEST,"CLOTH_4002","옷의 사진이 존재하지 않습니다."),
-    LOWER_TEMP_BIGGER_THAN_UPPER_TEMP(HttpStatus.BAD_REQUEST,"CLOTH_4004","옷의 하한 온도가 상한 온도 보다 높습니다."),
+    //TEAM
+    TEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TEAM_4001", "존재하지 않는 팀입니다."),
+    CANNOT_INVITE_SELF(HttpStatus.BAD_REQUEST, "TEAM_4002", "자기자신은 팀에 초대할 수 없습니다."),
+    ALREADY_TEAM_MEMBER(HttpStatus.BAD_REQUEST, "TEAM_4003", "이미 팀에 존재하는 멤버입니다."),
+
+    //TEAM MEMBER
+    TEAM_MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "TEAM_MEMBER_4001", "존재하지 않는 팀 멤버입니다."),
+    TEAM_MEMBER_NOT_IN_TEAM(HttpStatus.BAD_REQUEST, "TEAM_MEMBER_4002", "팀에 존재하지 않는 멤버입니다."),
+    CANNOT_DELETE_OWNER_MEMBER(HttpStatus.FORBIDDEN, "TEAM_MEMBER_4003", "팀장은 자기 자신을 팀 멤버에서 삭제할 수 없습니다. 팀 자체를 삭제해야 합니다."),
+    TEAM_INVITE_ALREADY_ACCEPTED(HttpStatus.BAD_REQUEST, "TEAM_MEMBER_4004", "이미 초대를 수락했습니다."),
+    TEAM_INVITE_ALREADY_REJECTED(HttpStatus.CONFLICT, "TEAM_INVITE_4005", "이미 거절된 팀 초대입니다."),
 
     // Member
     NO_SUCH_MEMBER(HttpStatus.BAD_REQUEST,"MEMBER_4001","멤버가 존재하지 않습니다."),
+    NO_SUCH_MEMBER_BY_EMAIL(HttpStatus.BAD_REQUEST, "MEMBER_4002", "유저가 존재하지 않는 이메일입니다."),
 
     // Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),

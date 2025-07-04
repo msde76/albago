@@ -1,9 +1,10 @@
 package backend.albago.global.exception;
 
+import backend.albago.global.error.code.status.BaseErrorCode;
+import backend.albago.global.error.code.status.ErrorReasonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import study.goorm.global.error.code.status.BaseErrorCode;
-import study.goorm.global.error.code.status.ErrorReasonDTO;
+
 
 @Getter
 @AllArgsConstructor

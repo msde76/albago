@@ -1,11 +1,12 @@
 package backend.albago.domain.model.exception.validator;
 
+import backend.albago.domain.model.exception.annotation.CheckPage;
+import backend.albago.global.error.code.status.ErrorStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import study.goorm.domain.model.exception.annotation.CheckPage;
-import study.goorm.global.error.code.status.ErrorStatus;
+
 
 @Component
 @RequiredArgsConstructor

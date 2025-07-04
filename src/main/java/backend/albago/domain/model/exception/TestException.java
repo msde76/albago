@@ -1,7 +1,7 @@
 package backend.albago.domain.model.exception;
 
-import study.goorm.global.error.code.status.BaseErrorCode;
-import study.goorm.global.exception.GeneralException;
+import backend.albago.global.error.code.status.BaseErrorCode;
+import backend.albago.global.exception.GeneralException;
 
 public class TestException extends GeneralException {
 

@@ -1,8 +1,8 @@
 package backend.albago.domain.model.exception.annotation;
 
+import backend.albago.domain.model.exception.validator.CheckPageSizeValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import study.goorm.domain.model.exception.validator.CheckPageSizeValidator;
 
 import java.lang.annotation.*;
 

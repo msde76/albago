@@ -1,12 +1,13 @@
 package backend.albago.global.common.response;
 
+import backend.albago.global.error.code.status.BaseCode;
+import backend.albago.global.error.code.status.BaseErrorCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import study.goorm.global.error.code.status.BaseCode;
-import study.goorm.global.error.code.status.BaseErrorCode;
+
 
 @Getter
 @AllArgsConstructor
