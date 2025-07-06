@@ -20,7 +20,7 @@ public class TeamRestController {
     private final TeamService teamService;
     //private final TeamPostService teamPostService;
 
-    @PostMapping
+    @PostMapping("")
     @Operation(summary = "팀을 생성 API", description = "query string으로 JWT 토큰과 팀 생성에 필요한 정보를 넘겨주세요.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_200", description = "OK, 성공적으로 생성되었습니다.")

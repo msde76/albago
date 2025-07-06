@@ -14,17 +14,24 @@ public enum ErrorStatus implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
-    //TEAM
+    // TEAM
     TEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TEAM_4001", "존재하지 않는 팀입니다."),
     CANNOT_INVITE_SELF(HttpStatus.BAD_REQUEST, "TEAM_4002", "자기자신은 팀에 초대할 수 없습니다."),
     ALREADY_TEAM_MEMBER(HttpStatus.BAD_REQUEST, "TEAM_4003", "이미 팀에 존재하는 멤버입니다."),
 
-    //TEAM MEMBER
+    // TEAM MEMBER
     TEAM_MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "TEAM_MEMBER_4001", "존재하지 않는 팀 멤버입니다."),
     TEAM_MEMBER_NOT_IN_TEAM(HttpStatus.BAD_REQUEST, "TEAM_MEMBER_4002", "팀에 존재하지 않는 멤버입니다."),
     CANNOT_DELETE_OWNER_MEMBER(HttpStatus.FORBIDDEN, "TEAM_MEMBER_4003", "팀장은 자기 자신을 팀 멤버에서 삭제할 수 없습니다. 팀 자체를 삭제해야 합니다."),
     TEAM_INVITE_ALREADY_ACCEPTED(HttpStatus.BAD_REQUEST, "TEAM_MEMBER_4004", "이미 초대를 수락했습니다."),
     TEAM_INVITE_ALREADY_REJECTED(HttpStatus.CONFLICT, "TEAM_INVITE_4005", "이미 거절된 팀 초대입니다."),
+    MEMBER_NOT_IN_TEAM(HttpStatus.BAD_REQUEST, "TEAM4002", "해당 멤버는 팀에 속해있지 않습니다."),
+
+    // SCHEDULE
+    SCHEDULE_NOT_FOUND(HttpStatus.BAD_REQUEST, "SCHEDULE_4001", "존재하지 않는 스케줄입니다."),
+
+    // Notification
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTIFICATION4001", "존재하지 않는 알림입니다."),
 
     // Member
     NO_SUCH_MEMBER(HttpStatus.BAD_REQUEST,"MEMBER_4001","멤버가 존재하지 않습니다."),

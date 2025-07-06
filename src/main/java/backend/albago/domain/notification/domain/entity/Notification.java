@@ -2,6 +2,7 @@ package backend.albago.domain.notification.domain.entity;
 
 import backend.albago.domain.member.domain.entity.Member;
 import backend.albago.domain.model.entity.BaseEntity;
+import backend.albago.domain.model.enums.NotificationType;
 import backend.albago.domain.team.domain.entity.Team;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,10 +31,21 @@ public class Notification extends BaseEntity {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @Lob
     @Column(nullable = false)
-    private String message;
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String body;
 
     @Column(nullable = false)
     private Boolean isRead = false;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
+
+    private Long relatedEntityId;
+
+    public void markAsRead() {
+        this.isRead = true;
+    }
 }

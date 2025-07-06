@@ -29,6 +29,10 @@ public class TeamSchedule extends BaseEntity {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
@@ -37,4 +41,10 @@ public class TeamSchedule extends BaseEntity {
 
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
+    private String title;
+
+    private String memo;
+
+    private String color;
 }

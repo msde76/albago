@@ -36,4 +36,13 @@ public class PersonalSchedule extends BaseEntity {
 
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
+    private String title;
+
+    private String memo;
+
+    private String color;
+
+    @Column(name = "team_schedule_id")
+    private Long teamScheduleId;
 }
