@@ -48,7 +48,7 @@ public class PersonalScheduleServiceImpl implements PersonalScheduleService {
 
         Long memberIdLong = Long.parseLong(memberId);
 
-        Member member = memberRepository.findById(memberIdLong)
+        memberRepository.findById(memberIdLong)
                 .orElseThrow(() -> new ScheduleException(ErrorStatus.NO_SUCH_MEMBER));
 
         if (startDate.isAfter(endDate)) {

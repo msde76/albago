@@ -24,7 +24,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final MemberRepository memberRepository;
     private final NotificationRepository notificationRepository;
-    private final TeamRepository teamRepository;
 
     @Override
     @Transactional(readOnly = true)

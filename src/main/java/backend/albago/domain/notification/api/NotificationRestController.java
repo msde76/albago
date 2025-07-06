@@ -48,7 +48,7 @@ public class NotificationRestController {
     })
     public BaseResponse<Void> deleteNotification(
             @RequestHeader(value = "member-id") String memberId,
-            @PathVariable("notificationId") Long notificationId
+            @PathVariable(value = "notificationId") Long notificationId
     ) {
         notificationService.deleteNotification(notificationId, memberId);
         return BaseResponse.onSuccess(SuccessStatus.NOTIFICATION_DELETE, null);
