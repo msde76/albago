@@ -226,7 +226,6 @@ public class TeamScheduleServiceImpl implements TeamScheduleService {
         return TeamScheduleConverter.toUpdateTeamScheduleResult(teamScheduleToUpdate);
     }
 
-    // 팀 스케줄 삭제
     @Override
     @Transactional
     public void deleteTeamSchedule(
@@ -249,7 +248,7 @@ public class TeamScheduleServiceImpl implements TeamScheduleService {
             throw new ScheduleException(ErrorStatus._FORBIDDEN);
         }
         if (!teamScheduleToDelete.getTeam().getId().equals(teamId)) {
-            throw new ScheduleException(ErrorStatus._BAD_REQUEST); // 스케줄이 요청된 팀에 속하지 않음
+            throw new ScheduleException(ErrorStatus._BAD_REQUEST);
         }
 
         teamScheduleRepository.delete(teamScheduleToDelete);
