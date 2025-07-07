@@ -53,7 +53,7 @@ public class Team extends BaseEntity {
     @Column(length = 255)
     private String deductions;
 
-    // 임금 지불 방식 (기존 컬럼들 유지)
+    // 임금 지불 방식
     @Column(name = "pay_daily", columnDefinition = "DECIMAL(10, 2) default 0.00")
     private BigDecimal dailyPay = BigDecimal.ZERO;
 

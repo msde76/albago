@@ -3,8 +3,6 @@ package backend.albago.domain.shift.api;
 import backend.albago.domain.shift.application.ShiftService;
 import backend.albago.domain.shift.dto.ShiftRequestDTO;
 import backend.albago.domain.shift.dto.ShiftResponseDTO;
-import backend.albago.domain.team.dto.TeamRequestDTO;
-import backend.albago.domain.team.dto.TeamResponseDTO;
 import backend.albago.global.common.response.BaseResponse;
 import backend.albago.global.error.code.status.SuccessStatus;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +26,7 @@ public class ShiftRestController {
     })
     public BaseResponse<ShiftResponseDTO.ClockInResult> clockIn(
             @RequestHeader(value = "member-id") String memberId,
-            @PathVariable(value = "team-id") Long teamId,
+            @PathVariable(value = "teamId") Long teamId,
             @RequestBody ShiftRequestDTO.ClockInDTO request
     ) {
         ShiftResponseDTO.ClockInResult result = shiftService.clockIn(teamId, memberId, request);
