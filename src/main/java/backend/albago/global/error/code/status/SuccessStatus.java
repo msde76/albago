@@ -40,6 +40,11 @@ public enum SuccessStatus implements BaseCode {
     NOTIFICATION_MARKED_AS_READ(HttpStatus.OK, "SCHEDULE_201", "알람이 성공적으로 읽음 처리되었습니다."),
     NOTIFICATION_DELETE(HttpStatus.OK, "SCHEDULE_202", "알람이 성공적으로 삭제되었습니다."),
 
+    // Shift
+    CLOCK_IN(HttpStatus.OK, "SHIFT_200", "출근 기록이 성공적으로 처리되었습니다."),
+    CLOCK_OUT(HttpStatus.OK, "SHIFT_201", "퇴근 기록이 성공적으로 처리되었습니다."),
+    GET_SHIFT_LOGS(HttpStatus.OK, "SHIFT2003", "근무 기록을 성공적으로 조회했습니다."),
+
     //Cloth
     CLOTH_VIEW_SUCCESS(HttpStatus.OK,"CLOTH_200","옷이 성공적으로 조회되었습니다."),
     CLOTH_CREATED(HttpStatus.CREATED, "CLOTH_201"," 옷이 성공적으로 생성되었습니다."),

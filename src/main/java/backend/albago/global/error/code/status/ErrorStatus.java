@@ -33,6 +33,15 @@ public enum ErrorStatus implements BaseErrorCode {
     // Notification
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTIFICATION4001", "존재하지 않는 알림입니다."),
 
+    // Shift
+    ALREADY_CLOCK_IN(HttpStatus.CONFLICT, "SHIFT_4001", "이미 출근 상태입니다. 퇴근을 먼저 해주세요."),
+    NOT_CLOCK_IN_STATE(HttpStatus.CONFLICT, "SHIFT_4002", "아직 출근 상태가 아닙니다. 먼저 출근을 기록해주세요."),
+    INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "COMMON4003", "시작일이 종료일보다 늦을 수 없습니다."),
+
+    // GPS
+    LOCATION_NOT_CONFIGURED(HttpStatus.BAD_REQUEST, "SHIFT_4003", "팀의 출퇴근 위치가 설정되지 않았습니다."),
+    OUT_OF_ATTENDANCE_RADIUS(HttpStatus.FORBIDDEN, "SHIFT_4004", "현재 위치가 출퇴근 허용 반경을 벗어났습니다."),
+
     // Member
     NO_SUCH_MEMBER(HttpStatus.BAD_REQUEST,"MEMBER_4001","멤버가 존재하지 않습니다."),
     NO_SUCH_MEMBER_BY_EMAIL(HttpStatus.BAD_REQUEST, "MEMBER_4002", "유저가 존재하지 않는 이메일입니다."),

@@ -65,4 +65,12 @@ public class Team extends BaseEntity {
 
     @Column(name = "pay_monthly", columnDefinition = "DECIMAL(10, 2) default 0.00")
     private BigDecimal monthlyPay = BigDecimal.ZERO;
+
+    private Double referenceLatitude;
+    private Double referenceLongitude;
+
+    private Double attendanceRadiusMeters;
+
+    @Column(length = 100)
+    private String locationName;
 }

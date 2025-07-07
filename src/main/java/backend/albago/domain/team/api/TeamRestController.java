@@ -51,7 +51,7 @@ public class TeamRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_202", description = "OK, 성공적으로 조회되었습니다.")
     })
     public BaseResponse<TeamResponseDTO.TeamResult> getTeam(
-            @RequestParam(value = "teamId") Long teamId,
+            @PathVariable(value = "teamId") Long teamId,
             @RequestHeader(value = "member-id") String memberId
     ) {
         TeamResponseDTO.TeamResult result = teamService.getTeam(teamId, memberId);
@@ -64,7 +64,7 @@ public class TeamRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_203", description = "OK, 성공적으로 수정되었습니다.")
     })
     public BaseResponse<TeamResponseDTO.TeamResult> updateTeam(
-            @RequestParam(value = "teamId") Long teamId,
+            @PathVariable(value = "teamId") Long teamId,
             @RequestHeader(value = "member-id") String memberId,
             @RequestBody TeamRequestDTO.TeamUpdateDTO request
     ) {
@@ -78,7 +78,7 @@ public class TeamRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_204", description = "OK, 성공적으로 삭제되었습니다.")
     })
     public BaseResponse<Void> deleteTeam(
-            @RequestParam(value = "teamId") Long teamId,
+            @PathVariable(value = "teamId") Long teamId,
             @RequestHeader(value = "member-id") String memberId
     ) {
         teamService.deleteTeam(teamId, memberId);
@@ -91,7 +91,7 @@ public class TeamRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_205", description = "OK, 성공적으로 수정되었습니다.")
     })
     public BaseResponse<TeamResponseDTO.TeamInviteResult> inviteTeam(
-            @RequestParam(value = "teamId") Long teamId,
+            @PathVariable(value = "teamId") Long teamId,
             @RequestHeader(value = "member-id") String memberId,
             @RequestBody TeamRequestDTO.InviteMemberDTO request
     ) {
@@ -105,8 +105,8 @@ public class TeamRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_206", description = "OK, 성공적으로 수정되었습니다.")
     })
     public BaseResponse<TeamResponseDTO.UpdateTeamMemberResult> updateTeamMember(
-            @RequestParam(value = "teamId") Long teamId,
-            @RequestParam(value = "teamMemberId") Long teamMemberId,
+            @PathVariable(value = "teamId") Long teamId,
+            @PathVariable(value = "teamMemberId") Long teamMemberId,
             @RequestHeader(value = "member-id") String memberId,
             @RequestBody TeamRequestDTO.UpdateTeamMemberDTO request
     ) {
@@ -120,8 +120,8 @@ public class TeamRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_207", description = "OK, 성공적으로 수정되었습니다.")
     })
     public BaseResponse<Void> deleteTeamMember(
-            @RequestParam(value = "teamId") Long teamId,
-            @RequestParam(value = "teamMemberId") Long teamMemberId,
+            @PathVariable(value = "teamId") Long teamId,
+            @PathVariable(value = "teamMemberId") Long teamMemberId,
             @RequestHeader(value = "member-id") String memberId
     ) {
         teamService.deleteTeamMember(teamId, teamMemberId, memberId);
@@ -134,8 +134,8 @@ public class TeamRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_208", description = "OK, 성공적으로 수정되었습니다.")
     })
     public BaseResponse<TeamResponseDTO.TeamInviteAcceptResult> inviteTeamAccept(
-            @RequestParam(value = "teamId") Long teamId,
-            @RequestParam(value = "teamMemberId") Long teamMemberId,
+            @PathVariable(value = "teamId") Long teamId,
+            @PathVariable(value = "teamMemberId") Long teamMemberId,
             @RequestHeader(value = "member-id") String memberId
     ) {
         TeamResponseDTO.TeamInviteAcceptResult result = teamService.inviteTeamAccept(teamId, teamMemberId, memberId);
@@ -148,8 +148,8 @@ public class TeamRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "TEAM_207", description = "OK, 성공적으로 수정되었습니다.")
     })
     public BaseResponse<Void> inviteTeamReject(
-            @RequestParam(value = "teamId") Long teamId,
-            @RequestParam(value = "teamMemberId") Long teamMemberId,
+            @PathVariable(value = "teamId") Long teamId,
+            @PathVariable(value = "teamMemberId") Long teamMemberId,
             @RequestHeader(value = "member-id") String memberId
     ) {
         teamService.inviteTeamReject(teamId, teamMemberId, memberId);
