@@ -11,6 +11,7 @@ import backend.albago.domain.post.domain.repository.PostLikeRepository;
 import backend.albago.domain.post.domain.repository.PostRepository;
 import backend.albago.domain.post.dto.PostRequestDTO;
 import backend.albago.domain.post.dto.PostResponseDTO;
+import backend.albago.domain.post.exception.PostException;
 import backend.albago.global.error.code.status.ErrorStatus;
 import backend.albago.global.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
@@ -42,16 +43,16 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         int page = request.getPage();
         long size = request.getSize();
 
         if (page < 0) {
-            throw new GeneralException(ErrorStatus.PAGE_SIZE_UNDER_ONE);
+            throw new PostException(ErrorStatus.PAGE_SIZE_UNDER_ONE);
         }
         if (size <= 0) {
-            throw new GeneralException(ErrorStatus.PAGE_UNDER_ONE);
+            throw new PostException(ErrorStatus.PAGE_UNDER_ONE);
         }
 
         Pageable pageable = PageRequest.of(page, (int) size, Sort.by("createdAt").ascending());
@@ -68,17 +69,17 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         int page = request.getPage();
         long size = request.getSize();
         final int MIN_LIKE_COUNT_FOR_POPULAR = 10;
 
         if (page < 0) {
-            throw new GeneralException(ErrorStatus.PAGE_SIZE_UNDER_ONE);
+            throw new PostException(ErrorStatus.PAGE_SIZE_UNDER_ONE);
         }
         if (size <= 0) {
-            throw new GeneralException(ErrorStatus.PAGE_UNDER_ONE);
+            throw new PostException(ErrorStatus.PAGE_UNDER_ONE);
         }
 
         Pageable pageable = PageRequest.of(page, (int) size,
@@ -99,10 +100,10 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member requesterMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         boolean isLikedByCurrentUser = postLikeRepository.findByPostAndMember(post, requesterMember).isPresent();
 
@@ -116,7 +117,7 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member authorMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post newPost = Post.builder()
                 .title(request.getTitle())
@@ -137,14 +138,14 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member requesterMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
 
         if (!post.getMember().getId().equals(requesterMember.getId())) {
-            throw new GeneralException(ErrorStatus._FORBIDDEN);
+            throw new PostException(ErrorStatus._FORBIDDEN);
         }
 
         post.setTitle(request.getTitle());
@@ -162,13 +163,13 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member requesterMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         if (!post.getMember().getId().equals(requesterMember.getId())) {
-            throw new GeneralException(ErrorStatus._FORBIDDEN);
+            throw new PostException(ErrorStatus._FORBIDDEN);
         }
 
         List<Comment> commentsToDelete = commentRepository.findByPost(post);
@@ -186,14 +187,14 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member likerMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         Optional<PostLike> existingLike = postLikeRepository.findByPostAndMember(post, likerMember);
         if (existingLike.isPresent()) {
-            throw new GeneralException(ErrorStatus.ALREADY_LIKED);
+            throw new PostException(ErrorStatus.ALREADY_LIKED);
         }
 
         PostLike newPostLike = PostLike.builder()
@@ -216,13 +217,13 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member unlikerMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         PostLike existingLike = postLikeRepository.findByPostAndMember(post, unlikerMember)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_LIKED_YET));
+                .orElseThrow(() -> new PostException(ErrorStatus.NOT_LIKED_YET));
 
         postLikeRepository.delete(existingLike);
 
@@ -241,19 +242,19 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         int page = request.getPage();
         long size = request.getSize();
 
         if (page < 0) {
-            throw new GeneralException(ErrorStatus.PAGE_SIZE_UNDER_ONE);
+            throw new PostException(ErrorStatus.PAGE_SIZE_UNDER_ONE);
         }
         if (size <= 0) {
-            throw new GeneralException(ErrorStatus.PAGE_UNDER_ONE);
+            throw new PostException(ErrorStatus.PAGE_UNDER_ONE);
         }
 
         Pageable pageable = PageRequest.of(page, (int) size, Sort.by("createdAt").ascending());
@@ -270,10 +271,10 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member authorMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         Comment newComment = Comment.builder()
                 .content(request.getContent())
@@ -293,16 +294,16 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member requesterMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         Comment comment = commentRepository.findByPostAndId(post, commentId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.COMMENT_NOT_FOUND)); // 새로운 에러 코드 필요
+                .orElseThrow(() -> new PostException(ErrorStatus.COMMENT_NOT_FOUND)); // 새로운 에러 코드 필요
 
         if (!comment.getMember().getId().equals(requesterMember.getId())) {
-            throw new GeneralException(ErrorStatus._FORBIDDEN);
+            throw new PostException(ErrorStatus._FORBIDDEN);
         }
 
         comment.setContent(request.getContent());
@@ -318,16 +319,16 @@ public class PostServiceImpl implements PostService {
         Long memberId = Long.parseLong(memberIdString);
 
         Member requesterMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+                .orElseThrow(() -> new PostException(ErrorStatus.NO_SUCH_MEMBER));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         Comment comment = commentRepository.findByPostAndId(post, commentId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new PostException(ErrorStatus.COMMENT_NOT_FOUND));
 
         if (!comment.getMember().getId().equals(requesterMember.getId())) {
-            throw new GeneralException(ErrorStatus._FORBIDDEN);
+            throw new PostException(ErrorStatus._FORBIDDEN);
         }
 
         commentRepository.delete(comment);

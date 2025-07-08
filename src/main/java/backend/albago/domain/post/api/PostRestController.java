@@ -150,7 +150,7 @@ public class PostRestController {
         return BaseResponse.onSuccess(SuccessStatus.COMMENT_CREATED, result);
     }
 
-    @PatchMapping("/postId}/comments/{commentId}")
+    @PatchMapping("/{postId}/comments/{commentId}")
     @Operation(summary = "댓글 수정 API", description = "특정 게시물에 댓글 수정")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "POST_200", description = "OK, 성공적으로 수정되었습니다.")
@@ -165,7 +165,7 @@ public class PostRestController {
         return BaseResponse.onSuccess(SuccessStatus.COMMENT_UPDATE, result);
     }
 
-    @DeleteMapping("/postId}/comments/{commentId}")
+    @DeleteMapping("/{postId}/comments/{commentId}")
     @Operation(summary = "댓글 삭제 API", description = "특정 게시물에 댓글 삭제")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "POST_200", description = "OK, 성공적으로 삭제되었습니다.")
