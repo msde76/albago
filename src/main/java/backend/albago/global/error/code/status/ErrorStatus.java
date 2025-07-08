@@ -46,6 +46,9 @@ public enum ErrorStatus implements BaseErrorCode {
     NO_SUCH_MEMBER(HttpStatus.BAD_REQUEST,"MEMBER_4001","멤버가 존재하지 않습니다."),
     NO_SUCH_MEMBER_BY_EMAIL(HttpStatus.BAD_REQUEST, "MEMBER_4002", "유저가 존재하지 않는 이메일입니다."),
 
+    // Post
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST_4001", "해당 게시물을 찾을 수 없습니다."),
+
     // Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),
     PAGE_SIZE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4002","페이지 사이즈는 1이상으로 입력해야 합니다."),

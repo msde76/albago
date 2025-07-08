@@ -43,7 +43,19 @@ public enum SuccessStatus implements BaseCode {
     // Shift
     CLOCK_IN(HttpStatus.OK, "SHIFT_200", "출근 기록이 성공적으로 처리되었습니다."),
     CLOCK_OUT(HttpStatus.OK, "SHIFT_201", "퇴근 기록이 성공적으로 처리되었습니다."),
-    GET_SHIFT_LOGS(HttpStatus.OK, "SHIFT2003", "근무 기록을 성공적으로 조회했습니다."),
+    GET_SHIFT_LOGS(HttpStatus.OK, "SHIFT_2003", "근무 기록을 성공적으로 조회되었습니다."),
+
+    // Post
+    GET_POSTS(HttpStatus.OK, "POST_200", "게시물 목록이 성공적으로 조회되었습니다."),
+    GET_LIKE_POSTS(HttpStatus.OK, "POST_201", "인기 게시물 목록이 성공적으로 조회되었습니다."),
+    GET_POST(HttpStatus.OK, "POST_202", "게시물이 성공적으로 조회되었습니다."),
+    POST_UPDATED(HttpStatus.OK, "POST_203", "게시물이 성공적으로 수정되었습니다."),
+    POST_DELETED(HttpStatus.NO_CONTENT, "POST_204", "게시물이 성공적으로 삭제되었습니다."),
+    POST_CREATED(HttpStatus.CREATED, "POST_205", "게시물이 성공적으로 생성되었습니다."),
+
+    // Like
+    POST_LIKE(HttpStatus.OK, "Like_200", "좋아요가 성공적으로 생성되었습니다."),
+    POST_UNLIKE(HttpStatus.OK, "Like_201", "좋아요가 성공적으로 취소되었습니다."),
 
     //Cloth
     CLOTH_VIEW_SUCCESS(HttpStatus.OK,"CLOTH_200","옷이 성공적으로 조회되었습니다."),
