@@ -13,7 +13,6 @@ import backend.albago.domain.post.dto.PostRequestDTO;
 import backend.albago.domain.post.dto.PostResponseDTO;
 import backend.albago.domain.post.exception.PostException;
 import backend.albago.global.error.code.status.ErrorStatus;
-import backend.albago.global.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
