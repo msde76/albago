@@ -31,9 +31,8 @@ public class HandoverNote extends BaseEntity {
     private Team team;
 
     @Column(nullable = false, length = 50)
-    private String type; // 인수인계 노트의 타입 (예: "일일", "주간", "특이사항")
+    private String title; // 인수인계 노트의 타입 (예: "일일", "주간", "특이사항")
 
-    @Lob
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String content;
 }

@@ -57,6 +57,14 @@ public enum SuccessStatus implements BaseCode {
     POST_LIKE(HttpStatus.OK, "Like_200", "좋아요가 성공적으로 생성되었습니다."),
     POST_UNLIKE(HttpStatus.OK, "Like_201", "좋아요가 성공적으로 취소되었습니다."),
 
+    // Handover
+    HANDOVER_CREATED(HttpStatus.CREATED, "HANDOVER_200", "인수인계 노트가 성공적으로 생성되었습니다."),
+    HANDOVERS_FINED(HttpStatus.CREATED, "HANDOVER_201", "인수인계 노트 목록이 성공적으로 조회되었습니다."),
+    HANDOVER_FINED(HttpStatus.CREATED, "HANDOVER_202", "인수인계 노트 세부 정보가 성공적으로 조회되었습니다."),
+    HANDOVER_UPDATE(HttpStatus.CREATED, "HANDOVER_203", "인수인계 노트가 성공적으로 수정되었습니다."),
+    HANDOVER_DELETE(HttpStatus.CREATED, "HANDOVER_204", "인수인계 노트가 성공적으로 삭제되었습니다."),
+
+
     //Cloth
     CLOTH_VIEW_SUCCESS(HttpStatus.OK,"CLOTH_200","옷이 성공적으로 조회되었습니다."),
     CLOTH_CREATED(HttpStatus.CREATED, "CLOTH_201"," 옷이 성공적으로 생성되었습니다."),
