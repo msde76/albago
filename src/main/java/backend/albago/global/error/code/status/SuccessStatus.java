@@ -59,11 +59,23 @@ public enum SuccessStatus implements BaseCode {
 
     // Handover
     HANDOVER_CREATED(HttpStatus.CREATED, "HANDOVER_200", "인수인계 노트가 성공적으로 생성되었습니다."),
-    HANDOVERS_FINED(HttpStatus.CREATED, "HANDOVER_201", "인수인계 노트 목록이 성공적으로 조회되었습니다."),
-    HANDOVER_FINED(HttpStatus.CREATED, "HANDOVER_202", "인수인계 노트 세부 정보가 성공적으로 조회되었습니다."),
-    HANDOVER_UPDATE(HttpStatus.CREATED, "HANDOVER_203", "인수인계 노트가 성공적으로 수정되었습니다."),
-    HANDOVER_DELETE(HttpStatus.CREATED, "HANDOVER_204", "인수인계 노트가 성공적으로 삭제되었습니다."),
+    HANDOVERS_FINED(HttpStatus.OK, "HANDOVER_201", "인수인계 노트 목록이 성공적으로 조회되었습니다."),
+    HANDOVER_FINED(HttpStatus.OK, "HANDOVER_202", "인수인계 노트 세부 정보가 성공적으로 조회되었습니다."),
+    HANDOVER_UPDATE(HttpStatus.OK, "HANDOVER_203", "인수인계 노트가 성공적으로 수정되었습니다."),
+    HANDOVER_DELETE(HttpStatus.OK, "HANDOVER_204", "인수인계 노트가 성공적으로 삭제되었습니다."),
 
+    // TeamPost
+    TEAM_POSTS_FINED(HttpStatus.OK, "TEAM_POST_200", "팀 게시물 목록이 성공적으로 조회되었습니다."),
+    TEAM_POST_FINED(HttpStatus.OK, "TEAM_POST_201", "팀 게시물의 상세 정보가 성공적으로 조회되었습니다."),
+    TEAM_POSTS_CREATE(HttpStatus.CREATED, "TEAM_POST_202", "팀 게시물이 성공적으로 생성되었습니다."),
+    TEAM_POSTS_UPDATE(HttpStatus.OK, "TEAM_POST_203", "팀 게시물이 성공적으로 수정되었습니다."),
+    TEAM_POSTS_DELETE(HttpStatus.OK, "TEAM_POST_204", "팀 게시물이 성공적으로 삭제되었습니다."),
+
+    // TeamPostComment
+    TEAM_POSTS_COMMENT_FINED(HttpStatus.OK, "TEAM_POST_COMMENT_200", "팀 게시물의 댓글 목록이 성공적으로 조회되엇습니다."),
+    TEAM_POSTS_COMMENT_CREATE(HttpStatus.CREATED, "TEAM_POST_COMMENT_201", "팀 게시물에 댓글이 성공적으로 생성되엇습니다."),
+    TEAM_POSTS_COMMENT_UPDATE(HttpStatus.OK, "TEAM_POST_COMMENT_202", "팀 게시물에 댓글이 성공적으로 수정되엇습니다."),
+    TEAM_POSTS_COMMENT_DELETE(HttpStatus.OK, "TEAM_POST_COMMENT_203", "팀 게시물에 댓글이 성공적으로 삭제되엇습니다."),
 
     //Cloth
     CLOTH_VIEW_SUCCESS(HttpStatus.OK,"CLOTH_200","옷이 성공적으로 조회되었습니다."),

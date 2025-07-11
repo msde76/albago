@@ -54,7 +54,7 @@ public class PostServiceImpl implements PostService {
             throw new PostException(ErrorStatus.PAGE_UNDER_ONE);
         }
 
-        Pageable pageable = PageRequest.of(page, (int) size, Sort.by("createdAt").ascending());
+        Pageable pageable = PageRequest.of(page, (int) size, Sort.by("createdAt").descending());
 
         Page<Post> postPage = postRepository.findAllByOrderByCreatedAtDesc(pageable);
 
@@ -299,7 +299,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new PostException(ErrorStatus.POST_NOT_FOUND));
 
         Comment comment = commentRepository.findByPostAndId(post, commentId)
-                .orElseThrow(() -> new PostException(ErrorStatus.COMMENT_NOT_FOUND)); // 새로운 에러 코드 필요
+                .orElseThrow(() -> new PostException(ErrorStatus.COMMENT_NOT_FOUND));
 
         if (!comment.getMember().getId().equals(requesterMember.getId())) {
             throw new PostException(ErrorStatus._FORBIDDEN);

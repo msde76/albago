@@ -41,7 +41,7 @@ public class NotificationRestController {
         return BaseResponse.onSuccess(SuccessStatus.NOTIFICATION_MARKED_AS_READ, null);
     }
 
-    @DeleteMapping("/{notification}")
+    @DeleteMapping("/{notificationId}")
     @Operation(summary = "알림 삭제 API", description = "특정 알림을 삭제합니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "NOTIFICATION_200", description = "OK, 성공적으로 수정되었습니다.")

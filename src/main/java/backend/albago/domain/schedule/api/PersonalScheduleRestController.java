@@ -46,7 +46,7 @@ public class PersonalScheduleRestController {
         return BaseResponse.onSuccess(SuccessStatus.PERSONAL_SCHEDULE_FOUND, result);
     }
 
-    @PatchMapping("personal/{scheduleId")
+    @PatchMapping("personal/{scheduleId}")
     @Operation(summary = "개인 스케줄 수정 API", description = "사용자의 개인 스케줄 수정")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "SCHEDULE_202", description = "OK, 성공적으로 수정되었습니다.")

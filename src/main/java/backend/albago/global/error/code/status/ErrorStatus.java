@@ -52,9 +52,14 @@ public enum ErrorStatus implements BaseErrorCode {
     // Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),
     PAGE_SIZE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4002","페이지 사이즈는 1이상으로 입력해야 합니다."),
+    PAGE_NUMBER_UNDER_ZERO(HttpStatus.BAD_REQUEST, "PAGE_4003", "페이지 번호는 0 이상이어야 합니다."),
 
     // Handover
     HANDOVER_NOT_FOUND(HttpStatus.NOT_FOUND, "HANDOVER_4001", "해당 인수인계 노트를 찾을 수 없습니다."),
+
+    // TeamPost
+    TEAM_POST_NOT_FOUND(HttpStatus.NOT_FOUND, "TEAM_POST_4001", "해당 팀 게시물을 찾을 수 없습니다."),
+    TEAM_POST_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "TEAM_POST_COMMENT_4002", "해당 팀 게시물 댓글을 찾을 수 없습니다."),
 
     // Category
     NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST, "CLOTH_4003", "카테고리가 존재하지 않습니다."),
