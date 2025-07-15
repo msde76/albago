@@ -61,6 +61,16 @@ public enum ErrorStatus implements BaseErrorCode {
     TEAM_POST_NOT_FOUND(HttpStatus.NOT_FOUND, "TEAM_POST_4001", "해당 팀 게시물을 찾을 수 없습니다."),
     TEAM_POST_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "TEAM_POST_COMMENT_4002", "해당 팀 게시물 댓글을 찾을 수 없습니다."),
 
+    // Substitution
+    SUBSTITUTION_NOT_FOUND(HttpStatus.NOT_FOUND, "SUBSTITUTION_4001", "해당 대타 요청을 찾을 수 없습니다."),
+    NOT_SUBSTITUTION_REQUESTER(HttpStatus.FORBIDDEN, "SUBSTITUTION_4002", "대타 요청자가 아닙니다."),
+    NOT_SUBSTITUTION_SUBSTITUTE(HttpStatus.FORBIDDEN, "SUBSTITUTION_4003", "대타 요청의 대상자가 아닙니다."),
+    SUBSTITUTION_NOT_PENDING(HttpStatus.BAD_REQUEST, "SUBSTITUTION_4004", "대타 요청이 대기 상태가 아니어서 처리할 수 없습니다."),
+    INVALID_SUBSTITUTION_TIME(HttpStatus.BAD_REQUEST, "SUBSTITUTION_4005", "대타 요청 시간이 올바르지 않습니다."),
+    CANNOT_REQUEST_SELF_SUBSTITUTION(HttpStatus.BAD_REQUEST, "SUBSTITUTION_4006", "본인에게 대타 요청을 할 수 없습니다."),
+    REQUESTER_NOT_IN_TEAM(HttpStatus.FORBIDDEN, "SUBSTITUTION_4007", "요청자가 해당 팀에 소속되지 않았습니다."),
+    SUBSTITUTE_NOT_IN_TEAM(HttpStatus.FORBIDDEN, "SUBSTITUTION_4008", "대타자가 해당 팀에 소속되지 않았습니다."),
+
     // Category
     NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST, "CLOTH_4003", "카테고리가 존재하지 않습니다."),
 

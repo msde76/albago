@@ -77,6 +77,16 @@ public enum SuccessStatus implements BaseCode {
     TEAM_POSTS_COMMENT_UPDATE(HttpStatus.OK, "TEAM_POST_COMMENT_202", "팀 게시물에 댓글이 성공적으로 수정되엇습니다."),
     TEAM_POSTS_COMMENT_DELETE(HttpStatus.OK, "TEAM_POST_COMMENT_203", "팀 게시물에 댓글이 성공적으로 삭제되엇습니다."),
 
+    // Substitution
+    SUBSTITUTION_CREATE(HttpStatus.CREATED, "SUBSTITUTION_200", "대타 요청이 성공적으로 생성되었습니다."),
+    SUBSTITUTION_REQUEST_FINED(HttpStatus.OK, "SUBSTITUTION_201", "사용자가 요청한 대타 요청 목록이 성공적으로 조회되었습니다."),
+    SUBSTITUTION_RECEIVE_FINED(HttpStatus.OK, "SUBSTITUTION_202", "사용자에게 요청된 대타 요청 목록이 성공적으로 조회되었습니다."),
+    SUBSTITUTION_FINED(HttpStatus.OK, "SUBSTITUTION_203", "사용자의 대타 요청의 상세 정보가 성공적으로 조회되었습니다."),
+    SUBSTITUTION_ACCEPT(HttpStatus.OK, "SUBSTITUTION_204", "대타 요청이 성공적으로 수락되었습니다."),
+    SUBSTITUTION_REJECT(HttpStatus.OK, "SUBSTITUTION_205", "대타 요청이 성공적으로 거절되었습니다."),
+    SUBSTITUTION_DELETE(HttpStatus.OK, "SUBSTITUTION_206", "대타 요청이 성공적으로 취소되었습니다."),
+    SUBSTITUTION_AVAILABILITY_CHECKED(HttpStatus.OK, "SUBSTITUTION_207", "대타 가능 인원이 성공적으로 조회되었습니다."),
+
     //Cloth
     CLOTH_VIEW_SUCCESS(HttpStatus.OK,"CLOTH_200","옷이 성공적으로 조회되었습니다."),
     CLOTH_CREATED(HttpStatus.CREATED, "CLOTH_201"," 옷이 성공적으로 생성되었습니다."),
