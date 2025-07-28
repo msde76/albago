@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class TeamServiceImpl implements TeamService {
                 savedTeam,
                 ownerMember,
                 PositionStatus.Manager,
-                savedTeam.getHourlyPay()
+                BigDecimal.ZERO
         );
 
         teamMemberRepository.save(ownerAsTeamMember);
@@ -80,14 +81,12 @@ public class TeamServiceImpl implements TeamService {
         memberRepository.findById(memberIdLong)
                 .orElseThrow(() -> new TeamException(ErrorStatus.NO_SUCH_MEMBER));
 
-        List<TeamMember> teamMembersInTeam = teamMemberRepository.findByTeam(team);
-
-        boolean isMemberOfTeam = teamMembersInTeam.stream()
-                .anyMatch(tm -> tm.getMember().getId().equals(memberId));
-
+        boolean isMemberOfTeam = teamMemberRepository.findByTeamAndMemberId(team, memberIdLong).isPresent();
         if (!isMemberOfTeam) {
             throw new TeamException(ErrorStatus._FORBIDDEN);
         }
+
+        List<TeamMember> teamMembersInTeam = teamMemberRepository.findByTeam(team);
 
         return TeamConverter.toTeamResult(team, teamMembersInTeam);
     }
@@ -111,18 +110,6 @@ public class TeamServiceImpl implements TeamService {
         Optional.ofNullable(request.getTeamName()).ifPresent(teamToUpdate::setTeamName);
         Optional.ofNullable(request.getImageUrl()).ifPresent(teamToUpdate::setImageUrl);
         Optional.ofNullable(request.getColor()).ifPresent(teamToUpdate::setColor);
-        Optional.ofNullable(request.getDailyPay()).ifPresent(teamToUpdate::setDailyPay);
-        Optional.ofNullable(request.getHourlyPay()).ifPresent(teamToUpdate::setHourlyPay);
-        Optional.ofNullable(request.getWeeklyPay()).ifPresent(teamToUpdate::setWeeklyPay);
-        Optional.ofNullable(request.getMonthlyPay()).ifPresent(teamToUpdate::setMonthlyPay);
-        Optional.ofNullable(request.getWeeklyAllowance()).ifPresent(teamToUpdate::setWeeklyAllowance);
-        Optional.ofNullable(request.getNightAllowance()).ifPresent(teamToUpdate::setNightAllowance);
-        Optional.ofNullable(request.getNightRate()).ifPresent(teamToUpdate::setNightRate);
-        Optional.ofNullable(request.getOvertimeAllowance()).ifPresent(teamToUpdate::setOvertimeAllowance);
-        Optional.ofNullable(request.getOvertimeRate()).ifPresent(teamToUpdate::setOvertimeRate);
-        Optional.ofNullable(request.getHolidayAllowance()).ifPresent(teamToUpdate::setHolidayAllowance);
-        Optional.ofNullable(request.getHolidayRate()).ifPresent(teamToUpdate::setHolidayRate);
-        Optional.ofNullable(request.getDeductions()).ifPresent(teamToUpdate::setDeductions);
 
         List<TeamMember> teamMembersInTeam = teamMemberRepository.findByTeam(teamToUpdate); // Fetch Join 사용
 
@@ -215,6 +202,19 @@ public class TeamServiceImpl implements TeamService {
         Optional.ofNullable(request.getWorkHours()).ifPresent(teamMemberToUpdate::setWorkHours);
         Optional.ofNullable(request.getBreakHours()).ifPresent(teamMemberToUpdate::setBreakHours);
         Optional.ofNullable(request.getColor()).ifPresent(teamMemberToUpdate::setColor);
+
+        Optional.ofNullable(request.getWeeklyAllowance()).ifPresent(teamMemberToUpdate::setWeeklyAllowance);
+        Optional.ofNullable(request.getNightAllowance()).ifPresent(teamMemberToUpdate::setNightAllowance);
+        Optional.ofNullable(request.getNightRate()).ifPresent(teamMemberToUpdate::setNightRate);
+        Optional.ofNullable(request.getOvertimeAllowance()).ifPresent(teamMemberToUpdate::setOvertimeAllowance);
+        Optional.ofNullable(request.getOvertimeRate()).ifPresent(teamMemberToUpdate::setOvertimeRate);
+        Optional.ofNullable(request.getHolidayAllowance()).ifPresent(teamMemberToUpdate::setHolidayAllowance);
+        Optional.ofNullable(request.getHolidayRate()).ifPresent(teamMemberToUpdate::setHolidayRate);
+        Optional.ofNullable(request.getDeductions()).ifPresent(teamMemberToUpdate::setDeductions);
+        Optional.ofNullable(request.getDailyPay()).ifPresent(teamMemberToUpdate::setDailyPay);
+        Optional.ofNullable(request.getHourlyPay()).ifPresent(teamMemberToUpdate::setHourlyPay);
+        Optional.ofNullable(request.getWeeklyPay()).ifPresent(teamMemberToUpdate::setWeeklyPay);
+        Optional.ofNullable(request.getMonthlyPay()).ifPresent(teamMemberToUpdate::setMonthlyPay);
 
         teamMemberRepository.save(teamMemberToUpdate);
 

@@ -12,6 +12,7 @@ import backend.albago.domain.schedule.dto.TeamScheduleRequestDTO;
 import backend.albago.domain.schedule.dto.TeamScheduleResponseDTO;
 import backend.albago.domain.schedule.exception.ScheduleException;
 import backend.albago.domain.team.domain.entity.Team;
+import backend.albago.domain.team.domain.entity.TeamMember; // TeamMember 임포트 추가
 import backend.albago.domain.team.domain.repository.TeamMemberRepository;
 import backend.albago.domain.team.domain.repository.TeamRepository;
 import backend.albago.global.error.code.status.ErrorStatus;
@@ -55,28 +56,43 @@ public class TeamScheduleServiceImpl implements TeamScheduleService {
         }
 
         Member assignedMember = null;
+        TeamMember assignedTeamMemberInfo = null; // 할당된 멤버의 TeamMember 정보
         if (request.getMemberId() != null) {
             assignedMember = memberRepository.findById(request.getMemberId())
                     .orElseThrow(() -> new ScheduleException(ErrorStatus.NO_SUCH_MEMBER));
 
-            if (!teamMemberRepository.existsByTeamAndMember(team, assignedMember)) {
-                throw new ScheduleException(ErrorStatus.MEMBER_NOT_IN_TEAM);
-            }
+            // 할당된 멤버가 해당 팀에 속하는지 확인하고 TeamMember 정보 가져오기
+            assignedTeamMemberInfo = teamMemberRepository.findByTeamAndMember(team, assignedMember)
+                    .orElseThrow(() -> new ScheduleException(ErrorStatus.MEMBER_NOT_IN_TEAM));
         }
 
-        TeamSchedule teamSchedule = TeamScheduleConverter.toTeamSchedule(team, assignedMember, request);
+        // TeamScheduleConverter에 TeamMember 정보를 함께 전달하여 급여 정보 복사
+        TeamSchedule teamSchedule = TeamScheduleConverter.toTeamSchedule(team, assignedMember, assignedTeamMemberInfo, request);
         TeamSchedule savedTeamSchedule = teamScheduleRepository.save(teamSchedule);
 
+        // 개인 스케줄에 반영 (할당된 멤버가 있는 경우)
         if (assignedMember != null) {
             PersonalSchedule personalSchedule = PersonalSchedule.builder()
                     .member(assignedMember)
-                    .date(savedTeamSchedule.getDate())
+                    .team(team)
+                    .scheduleType("team")
                     .startTime(savedTeamSchedule.getStartTime())
                     .endTime(savedTeamSchedule.getEndTime())
-                    .title(savedTeamSchedule.getTitle())
+                    .name(savedTeamSchedule.getName())
                     .memo(savedTeamSchedule.getMemo())
                     .color(savedTeamSchedule.getColor())
-                    .teamScheduleId(savedTeamSchedule.getId())
+                    .relatedTeamScheduleId(savedTeamSchedule.getId())
+
+                    // PersonalSchedule에 존재하는 급여 필드만 복사
+                    .hourlyWage(savedTeamSchedule.getScheduleHourlyWage())
+                    .weeklyAllowance(savedTeamSchedule.getWeeklyAllowance())
+                    .nightAllowance(savedTeamSchedule.getNightAllowance())
+                    .nightRate(savedTeamSchedule.getNightRate())
+                    .overtimeAllowance(savedTeamSchedule.getOvertimeAllowance())
+                    .overtimeRate(savedTeamSchedule.getOvertimeRate())
+                    .holidayAllowance(savedTeamSchedule.getHolidayAllowance())
+                    .holidayRate(savedTeamSchedule.getHolidayRate())
+                    .deductions(savedTeamSchedule.getDeductions())
                     .build();
             personalScheduleRepository.save(personalSchedule);
         }
@@ -109,7 +125,10 @@ public class TeamScheduleServiceImpl implements TeamScheduleService {
         }
 
         List<TeamSchedule> teamSchedules =
-                teamScheduleRepository.findByTeamIdAndDateBetweenOrderByDateAscStartTimeAsc(teamId, startDate, endDate);
+                teamScheduleRepository.findByTeamIdAndStartTimeBetweenOrderByStartTimeAsc(
+                        teamId, startDate.atStartOfDay(), endDate.atStartOfDay().plusDays(1).minusNanos(1)
+                );
+
 
         return TeamScheduleConverter.toFindTeamScheduleResult(teamId, teamSchedules);
     }
@@ -147,80 +166,47 @@ public class TeamScheduleServiceImpl implements TeamScheduleService {
             newAssignedMember = memberRepository.findById(request.getMemberId())
                     .orElseThrow(() -> new ScheduleException(ErrorStatus.NO_SUCH_MEMBER));
 
-            if (!teamMemberRepository.existsByTeamAndMember(team, newAssignedMember)) {
-                throw new ScheduleException(ErrorStatus.MEMBER_NOT_IN_TEAM);
-            }
+            teamMemberRepository.findByTeamAndMember(team, newAssignedMember)
+                    .orElseThrow(() -> new ScheduleException(ErrorStatus.MEMBER_NOT_IN_TEAM));
+
             teamScheduleToUpdate.setMember(newAssignedMember);
         } else {
             teamScheduleToUpdate.setMember(null);
         }
 
-        Optional.ofNullable(request.getDate()).ifPresent(teamScheduleToUpdate::setDate);
         Optional.ofNullable(request.getStartTime()).ifPresent(teamScheduleToUpdate::setStartTime);
         Optional.ofNullable(request.getEndTime()).ifPresent(teamScheduleToUpdate::setEndTime);
-        Optional.ofNullable(request.getTitle()).ifPresent(teamScheduleToUpdate::setTitle);
+        Optional.ofNullable(request.getName()).ifPresent(teamScheduleToUpdate::setName);
         Optional.ofNullable(request.getMemo()).ifPresent(teamScheduleToUpdate::setMemo);
         Optional.ofNullable(request.getColor()).ifPresent(teamScheduleToUpdate::setColor);
 
-        // 3. 개인 스케줄에 반영 로직
-        Optional<PersonalSchedule> optionalPersonalSchedule = personalScheduleRepository.findByTeamScheduleId(teamScheduleId);
+        Optional.ofNullable(request.getScheduleHourlyWage()).ifPresent(teamScheduleToUpdate::setScheduleHourlyWage);
+        Optional.ofNullable(request.getWeeklyAllowance()).ifPresent(teamScheduleToUpdate::setWeeklyAllowance);
+        Optional.ofNullable(request.getNightAllowance()).ifPresent(teamScheduleToUpdate::setNightAllowance);
+        Optional.ofNullable(request.getNightRate()).ifPresent(teamScheduleToUpdate::setNightRate);
+        Optional.ofNullable(request.getOvertimeAllowance()).ifPresent(teamScheduleToUpdate::setOvertimeAllowance);
+        Optional.ofNullable(request.getOvertimeRate()).ifPresent(teamScheduleToUpdate::setOvertimeRate);
+        Optional.ofNullable(request.getHolidayAllowance()).ifPresent(teamScheduleToUpdate::setHolidayAllowance);
+        Optional.ofNullable(request.getHolidayRate()).ifPresent(teamScheduleToUpdate::setHolidayRate);
+        Optional.ofNullable(request.getDeductions()).ifPresent(teamScheduleToUpdate::setDeductions);
 
-        if (optionalPersonalSchedule.isPresent()) {
-            PersonalSchedule personalSchedule = optionalPersonalSchedule.get();
+        Optional<PersonalSchedule> optionalPersonalSchedule = personalScheduleRepository.findByRelatedTeamScheduleId(teamScheduleId); // findByTeamScheduleId -> findByRelatedTeamScheduleId로 변경
 
-            if (oldAssignedMember != null && newAssignedMember == null) {
-                // 기존에 할당된 멤버가 있었는데 이제 없어짐 -> 개인 스케줄 삭제
-                personalScheduleRepository.delete(personalSchedule);
-            } else if (oldAssignedMember == null && newAssignedMember != null) {
-                // 기존에 할당된 멤버가 없었는데 새로 할당됨 -> 개인 스케줄 새로 생성
-                PersonalSchedule newPersonalSchedule = PersonalSchedule.builder()
-                        .member(newAssignedMember)
-                        .date(teamScheduleToUpdate.getDate())
-                        .startTime(teamScheduleToUpdate.getStartTime())
-                        .endTime(teamScheduleToUpdate.getEndTime())
-                        .title(teamScheduleToUpdate.getTitle())
-                        .memo(teamScheduleToUpdate.getMemo())
-                        .color(teamScheduleToUpdate.getColor())
-                        .teamScheduleId(teamScheduleToUpdate.getId())
-                        .build();
-                personalScheduleRepository.save(newPersonalSchedule);
-            } else if (oldAssignedMember != null && newAssignedMember != null && !oldAssignedMember.getId().equals(newAssignedMember.getId())) {
-                // 할당된 멤버가 다른 멤버로 변경됨 -> 기존 개인 스케줄 삭제 후 새 멤버의 개인 스케줄 생성
-                personalScheduleRepository.delete(personalSchedule);
-                PersonalSchedule newPersonalSchedule = PersonalSchedule.builder()
-                        .member(newAssignedMember)
-                        .date(teamScheduleToUpdate.getDate())
-                        .startTime(teamScheduleToUpdate.getStartTime())
-                        .endTime(teamScheduleToUpdate.getEndTime())
-                        .title(teamScheduleToUpdate.getTitle())
-                        .memo(teamScheduleToUpdate.getMemo())
-                        .color(teamScheduleToUpdate.getColor())
-                        .teamScheduleId(teamScheduleToUpdate.getId())
-                        .build();
-                personalScheduleRepository.save(newPersonalSchedule);
-            } else {
-                // 할당된 멤버는 동일하거나, 할당된 멤버가 없는데 여전히 없는 경우 -> 내용만 업데이트
-                personalSchedule.setDate(teamScheduleToUpdate.getDate());
-                personalSchedule.setStartTime(teamScheduleToUpdate.getStartTime());
-                personalSchedule.setEndTime(teamScheduleToUpdate.getEndTime());
-                personalSchedule.setTitle(teamScheduleToUpdate.getTitle());
-                personalSchedule.setMemo(teamScheduleToUpdate.getMemo());
-                personalSchedule.setColor(teamScheduleToUpdate.getColor());
-                personalScheduleRepository.save(personalSchedule);
-            }
+        if (oldAssignedMember != null && newAssignedMember == null) {
+            optionalPersonalSchedule.ifPresent(personalScheduleRepository::delete);
         } else if (newAssignedMember != null) {
-            // 기존 개인 스케줄이 없는데 새로 멤버가 할당된 경우 (예: teamScheduleId가 null이었다가 채워진 경우)
-            PersonalSchedule personalSchedule = PersonalSchedule.builder()
-                    .member(newAssignedMember)
-                    .date(teamScheduleToUpdate.getDate())
-                    .startTime(teamScheduleToUpdate.getStartTime())
-                    .endTime(teamScheduleToUpdate.getEndTime())
-                    .title(teamScheduleToUpdate.getTitle())
-                    .memo(teamScheduleToUpdate.getMemo())
-                    .color(teamScheduleToUpdate.getColor())
-                    .teamScheduleId(teamScheduleToUpdate.getId())
-                    .build();
-            personalScheduleRepository.save(personalSchedule);
+            if (optionalPersonalSchedule.isPresent()) {
+                PersonalSchedule personalSchedule = optionalPersonalSchedule.get();
+
+                if (!personalSchedule.getMember().getId().equals(newAssignedMember.getId())) {
+                    personalScheduleRepository.delete(personalSchedule);
+                    createAndSavePersonalSchedule(newAssignedMember, teamScheduleToUpdate);
+                } else {
+                    updatePersonalScheduleContent(personalSchedule, teamScheduleToUpdate);
+                }
+            } else {
+                createAndSavePersonalSchedule(newAssignedMember, teamScheduleToUpdate);
+            }
         }
 
         return TeamScheduleConverter.toUpdateTeamScheduleResult(teamScheduleToUpdate);
@@ -251,6 +237,59 @@ public class TeamScheduleServiceImpl implements TeamScheduleService {
             throw new ScheduleException(ErrorStatus._BAD_REQUEST);
         }
 
+        // 팀 스케줄 삭제 시, 연결된 개인 스케줄도 삭제
+        personalScheduleRepository.findByRelatedTeamScheduleId(teamScheduleId)
+                .ifPresent(personalScheduleRepository::delete);
+
         teamScheduleRepository.delete(teamScheduleToDelete);
+    }
+
+    // 개인 스케줄 생성 헬퍼 메서드
+    private void createAndSavePersonalSchedule(Member member, TeamSchedule teamSchedule) {
+        PersonalSchedule personalSchedule = PersonalSchedule.builder()
+                .member(member)
+                .team(teamSchedule.getTeam())
+                .scheduleType("team")
+                .startTime(teamSchedule.getStartTime())
+                .endTime(teamSchedule.getEndTime())
+                .name(teamSchedule.getName())
+                .memo(teamSchedule.getMemo())
+                .color(teamSchedule.getColor())
+                .relatedTeamScheduleId(teamSchedule.getId())
+
+                // PersonalSchedule에 존재하는 급여 필드만 복사 (TeamSchedule에 해당 필드가 있다고 가정)
+                .hourlyWage(teamSchedule.getScheduleHourlyWage())
+                .weeklyAllowance(teamSchedule.getWeeklyAllowance())
+                .nightAllowance(teamSchedule.getNightAllowance())
+                .nightRate(teamSchedule.getNightRate())
+                .overtimeAllowance(teamSchedule.getOvertimeAllowance())
+                .overtimeRate(teamSchedule.getOvertimeRate())
+                .holidayAllowance(teamSchedule.getHolidayAllowance())
+                .holidayRate(teamSchedule.getHolidayRate())
+                .deductions(teamSchedule.getDeductions())
+                .build();
+        personalScheduleRepository.save(personalSchedule);
+    }
+
+    // 개인 스케줄 내용 업데이트 헬퍼 메서드
+    private void updatePersonalScheduleContent(PersonalSchedule personalSchedule, TeamSchedule teamSchedule) {
+        personalSchedule.setStartTime(teamSchedule.getStartTime());
+        personalSchedule.setEndTime(teamSchedule.getEndTime());
+        personalSchedule.setName(teamSchedule.getName());
+        personalSchedule.setMemo(teamSchedule.getMemo());
+        personalSchedule.setColor(teamSchedule.getColor());
+
+        // PersonalSchedule에 존재하는 급여 필드만 업데이트 (TeamSchedule에 해당 필드가 있다고 가정)
+        personalSchedule.setHourlyWage(teamSchedule.getScheduleHourlyWage());
+        personalSchedule.setWeeklyAllowance(teamSchedule.getWeeklyAllowance());
+        personalSchedule.setNightAllowance(teamSchedule.getNightAllowance());
+        personalSchedule.setNightRate(teamSchedule.getNightRate());
+        personalSchedule.setOvertimeAllowance(teamSchedule.getOvertimeAllowance());
+        personalSchedule.setOvertimeRate(teamSchedule.getOvertimeRate());
+        personalSchedule.setHolidayAllowance(teamSchedule.getHolidayAllowance());
+        personalSchedule.setHolidayRate(teamSchedule.getHolidayRate());
+        personalSchedule.setDeductions(teamSchedule.getDeductions());
+
+        personalScheduleRepository.save(personalSchedule);
     }
 }

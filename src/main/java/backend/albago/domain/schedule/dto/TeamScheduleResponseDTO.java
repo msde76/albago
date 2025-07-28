@@ -5,9 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 public class TeamScheduleResponseDTO {
@@ -21,14 +20,28 @@ public class TeamScheduleResponseDTO {
         private Long teamId;
         private Long memberId;
         private String memberName;
-        private LocalDate date;
-        private LocalTime startTime;
-        private LocalTime endTime;
-        private String title;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private String name;
         private String memo;
         private String color;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+
+        // TeamSchedule에 추가된 급여 관련 필드들
+        private BigDecimal scheduleHourlyWage;
+        private Boolean weeklyAllowance;
+        private Boolean nightAllowance;
+        private BigDecimal nightRate;
+        private Boolean overtimeAllowance;
+        private BigDecimal overtimeRate;
+        private Boolean holidayAllowance;
+        private BigDecimal holidayRate;
+        private String deductions;
+        private BigDecimal dailyPay;
+        private BigDecimal hourlyPay;
+        private BigDecimal weeklyPay;
+        private BigDecimal monthlyPay;
     }
 
     @Getter
@@ -39,13 +52,27 @@ public class TeamScheduleResponseDTO {
         private Long teamScheduleId;
         private Long teamId;
         private Long memberId;
-        private LocalDate date;
-        private LocalTime startTime;
-        private LocalTime endTime;
-        private String title;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private String name;
         private String memo;
         private String color;
         private LocalDateTime createdAt;
+
+        // TeamSchedule에 추가된 급여 관련 필드들
+        private BigDecimal scheduleHourlyWage;
+        private Boolean weeklyAllowance;
+        private Boolean nightAllowance;
+        private BigDecimal nightRate;
+        private Boolean overtimeAllowance;
+        private BigDecimal overtimeRate;
+        private Boolean holidayAllowance;
+        private BigDecimal holidayRate;
+        private String deductions;
+        private BigDecimal dailyPay;
+        private BigDecimal hourlyPay;
+        private BigDecimal weeklyPay;
+        private BigDecimal monthlyPay;
     }
 
     @Getter
@@ -66,13 +93,27 @@ public class TeamScheduleResponseDTO {
         private Long teamScheduleId;
         private Long teamId;
         private Long memberId;
-        private LocalDate date;
-        private LocalTime startTime;
-        private LocalTime endTime;
-        private String title;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private String name;
         private String memo;
         private String color;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+
+        // TeamSchedule에 추가된 급여 관련 필드들
+        private BigDecimal scheduleHourlyWage;
+        private Boolean weeklyAllowance;
+        private Boolean nightAllowance;
+        private BigDecimal nightRate;
+        private Boolean overtimeAllowance;
+        private BigDecimal overtimeRate;
+        private Boolean holidayAllowance;
+        private BigDecimal holidayRate;
+        private String deductions;
+        private BigDecimal dailyPay;
+        private BigDecimal hourlyPay;
+        private BigDecimal weeklyPay;
+        private BigDecimal monthlyPay;
     }
 }

@@ -9,6 +9,7 @@ import backend.albago.domain.team.dto.TeamResponseDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TeamConverter {
@@ -18,18 +19,6 @@ public class TeamConverter {
                 .teamName(request.getTeamName())
                 .color(request.getColor())
                 .imageUrl(request.getImageUrl())
-                .dailyPay(request.getDailyPay() != null ? request.getDailyPay() : BigDecimal.ZERO)
-                .hourlyPay(request.getHourlyPay() != null ? request.getHourlyPay() : BigDecimal.ZERO)
-                .weeklyPay(request.getWeeklyPay() != null ? request.getWeeklyPay() : BigDecimal.ZERO)
-                .monthlyPay(request.getMonthlyPay() != null ? request.getMonthlyPay() : BigDecimal.ZERO)
-                .weeklyAllowance(request.getWeeklyAllowance() != null ? request.getWeeklyAllowance() : false)
-                .nightAllowance(request.getNightAllowance() != null ? request.getNightAllowance() : false)
-                .nightRate(request.getNightRate() != null ? request.getNightRate() : BigDecimal.ONE) // DTO가 BigDecimal이므로 직접 사용
-                .overtimeAllowance(request.getOvertimeAllowance() != null ? request.getOvertimeAllowance() : false)
-                .overtimeRate(request.getOvertimeRate() != null ? request.getOvertimeRate() : BigDecimal.ONE) // DTO가 BigDecimal이므로 직접 사용
-                .holidayAllowance(request.getHolidayAllowance() != null ? request.getHolidayAllowance() : false)
-                .holidayRate(request.getHolidayRate() != null ? request.getHolidayRate() : BigDecimal.ONE) // DTO가 BigDecimal이므로 직접 사용
-                .deductions(request.getDeductions())
                 .ownerMember(ownerMember)
                 .build();
     }
@@ -44,6 +33,19 @@ public class TeamConverter {
                 .workHours(0.0)
                 .breakHours(0.0)
                 .isAccepted(true) // 팀 생성자는 즉시 수락 상태
+                // 오너 멤버는 팀 생성 시 TeamMember의 기본 급여 정책을 따라가도록 설정
+                .weeklyAllowance(false)
+                .nightAllowance(false)
+                .nightRate(BigDecimal.ONE)
+                .overtimeAllowance(false)
+                .overtimeRate(BigDecimal.ONE)
+                .holidayAllowance(false)
+                .holidayRate(BigDecimal.ONE)
+                .deductions(null)
+                .dailyPay(BigDecimal.ZERO)
+                .hourlyPay(BigDecimal.ZERO)
+                .weeklyPay(BigDecimal.ZERO)
+                .monthlyPay(BigDecimal.ZERO)
                 .build();
     }
 
@@ -90,6 +92,19 @@ public class TeamConverter {
                 .salary(teamMember.getSalary())
                 .isAccepted(teamMember.getIsAccepted())
                 .color(teamMember.getColor())
+
+                .weeklyAllowance(teamMember.getWeeklyAllowance())
+                .nightAllowance(teamMember.getNightAllowance())
+                .nightRate(teamMember.getNightRate())
+                .overtimeAllowance(teamMember.getOvertimeAllowance())
+                .overtimeRate(teamMember.getOvertimeRate())
+                .holidayAllowance(teamMember.getHolidayAllowance())
+                .holidayRate(teamMember.getHolidayRate())
+                .deductions(teamMember.getDeductions())
+                .dailyPay(teamMember.getDailyPay())
+                .hourlyPay(teamMember.getHourlyPay())
+                .weeklyPay(teamMember.getWeeklyPay())
+                .monthlyPay(teamMember.getMonthlyPay())
                 .build();
     }
 
@@ -105,18 +120,6 @@ public class TeamConverter {
                 .imageUrl(team.getImageUrl())
                 .color(team.getColor())
                 .ownerMemberId(team.getOwnerMember().getId())
-                .weeklyAllowance(team.isWeeklyAllowance())
-                .nightAllowance(team.isNightAllowance())
-                .nightRate(team.getNightRate())
-                .overtimeAllowance(team.isOvertimeAllowance())
-                .overtimeRate(team.getOvertimeRate())
-                .holidayAllowance(team.isHolidayAllowance())
-                .holidayRate(team.getHolidayRate())
-                .deductions(team.getDeductions())
-                .dailyPay(team.getDailyPay())
-                .hourlyPay(team.getHourlyPay())
-                .weeklyPay(team.getWeeklyPay())
-                .monthlyPay(team.getMonthlyPay())
                 .members(memberInfos)
                 .createdAt(team.getCreatedAt())
                 .updatedAt(team.getUpdatedAt())
@@ -133,6 +136,20 @@ public class TeamConverter {
                 .workHours(inviteRequest.getWorkHours() != null ? inviteRequest.getWorkHours() : 0.0)
                 .breakHours(inviteRequest.getBreakHours() != null ? inviteRequest.getBreakHours() : 0.0)
                 .isAccepted(false) // 초대 시에는 기본적으로 미수락 상태
+                .color(inviteRequest.getColor())
+                // TeamMember로 이동된 급여 관련 필드 매핑
+                .weeklyAllowance(Optional.ofNullable(inviteRequest.getWeeklyAllowance()).orElse(false))
+                .nightAllowance(Optional.ofNullable(inviteRequest.getNightAllowance()).orElse(false))
+                .nightRate(Optional.ofNullable(inviteRequest.getNightRate()).orElse(BigDecimal.ONE))
+                .overtimeAllowance(Optional.ofNullable(inviteRequest.getOvertimeAllowance()).orElse(false))
+                .overtimeRate(Optional.ofNullable(inviteRequest.getOvertimeRate()).orElse(BigDecimal.ONE))
+                .holidayAllowance(Optional.ofNullable(inviteRequest.getHolidayAllowance()).orElse(false))
+                .holidayRate(Optional.ofNullable(inviteRequest.getHolidayRate()).orElse(BigDecimal.ONE))
+                .deductions(inviteRequest.getDeductions())
+                .dailyPay(Optional.ofNullable(inviteRequest.getDailyPay()).orElse(BigDecimal.ZERO))
+                .hourlyPay(Optional.ofNullable(inviteRequest.getHourlyPay()).orElse(BigDecimal.ZERO))
+                .weeklyPay(Optional.ofNullable(inviteRequest.getWeeklyPay()).orElse(BigDecimal.ZERO))
+                .monthlyPay(Optional.ofNullable(inviteRequest.getMonthlyPay()).orElse(BigDecimal.ZERO))
                 .build();
     }
 
@@ -148,6 +165,19 @@ public class TeamConverter {
                 .salary(teamMember.getSalary())
                 .isAccepted(teamMember.getIsAccepted())
                 .invitedAt(teamMember.getCreatedAt())
+
+                .weeklyAllowance(teamMember.getWeeklyAllowance())
+                .nightAllowance(teamMember.getNightAllowance())
+                .nightRate(teamMember.getNightRate())
+                .overtimeAllowance(teamMember.getOvertimeAllowance())
+                .overtimeRate(teamMember.getOvertimeRate())
+                .holidayAllowance(teamMember.getHolidayAllowance())
+                .holidayRate(teamMember.getHolidayRate())
+                .deductions(teamMember.getDeductions())
+                .dailyPay(teamMember.getDailyPay())
+                .hourlyPay(teamMember.getHourlyPay())
+                .weeklyPay(teamMember.getWeeklyPay())
+                .monthlyPay(teamMember.getMonthlyPay())
                 .build();
     }
 
@@ -167,6 +197,19 @@ public class TeamConverter {
                 .isAccepted(teamMember.getIsAccepted())
                 .color(teamMember.getColor())
                 .updatedAt(teamMember.getUpdatedAt())
+
+                .weeklyAllowance(teamMember.getWeeklyAllowance())
+                .nightAllowance(teamMember.getNightAllowance())
+                .nightRate(teamMember.getNightRate())
+                .overtimeAllowance(teamMember.getOvertimeAllowance())
+                .overtimeRate(teamMember.getOvertimeRate())
+                .holidayAllowance(teamMember.getHolidayAllowance())
+                .holidayRate(teamMember.getHolidayRate())
+                .deductions(teamMember.getDeductions())
+                .dailyPay(teamMember.getDailyPay())
+                .hourlyPay(teamMember.getHourlyPay())
+                .weeklyPay(teamMember.getWeeklyPay())
+                .monthlyPay(teamMember.getMonthlyPay())
                 .build();
     }
 
@@ -185,6 +228,19 @@ public class TeamConverter {
                 .isAccepted(teamMember.getIsAccepted()) // 이 필드가 true여야 함
                 .color(teamMember.getColor())
                 .acceptedAt(teamMember.getUpdatedAt())
+
+                .weeklyAllowance(teamMember.getWeeklyAllowance())
+                .nightAllowance(teamMember.getNightAllowance())
+                .nightRate(teamMember.getNightRate())
+                .overtimeAllowance(teamMember.getOvertimeAllowance())
+                .overtimeRate(teamMember.getOvertimeRate())
+                .holidayAllowance(teamMember.getHolidayAllowance())
+                .holidayRate(teamMember.getHolidayRate())
+                .deductions(teamMember.getDeductions())
+                .dailyPay(teamMember.getDailyPay())
+                .hourlyPay(teamMember.getHourlyPay())
+                .weeklyPay(teamMember.getWeeklyPay())
+                .monthlyPay(teamMember.getMonthlyPay())
                 .build();
     }
 }

@@ -4,62 +4,89 @@ import backend.albago.domain.member.domain.entity.Member;
 import backend.albago.domain.schedule.domain.entity.PersonalSchedule;
 import backend.albago.domain.schedule.dto.PersonalScheduleRequestDTO;
 import backend.albago.domain.schedule.dto.PersonalScheduleResponseDTO;
+import backend.albago.domain.team.domain.entity.Team;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PersonalScheduleConverter {
 
-    // CreatePersonalScheduleDTO를 PersonalSchedule 엔티티로 변환
-    public static PersonalSchedule toPersonalSchedule(Member member, PersonalScheduleRequestDTO.CreatePersonalScheduleDTO request) {
+    public static PersonalSchedule toPersonalSchedule(Member member, Team team, PersonalScheduleRequestDTO.CreatePersonalScheduleDTO request) {
         return PersonalSchedule.builder()
                 .member(member)
-                .date(request.getDate())
+                .team(team)
+                .name(request.getName())
+                .scheduleType(request.getScheduleType())
                 .startTime(request.getStartTime())
                 .endTime(request.getEndTime())
-                .title(request.getTitle())
                 .memo(request.getMemo())
                 .color(request.getColor())
+                .hourlyWage(request.getHourlyWage())
+                .weeklyAllowance(request.getWeeklyAllowance())
+                .nightAllowance(request.getNightAllowance())
+                .nightRate(request.getNightRate())
+                .overtimeAllowance(request.getOvertimeAllowance())
+                .overtimeRate(request.getOvertimeRate())
+                .holidayAllowance(request.getHolidayAllowance())
+                .holidayRate(request.getHolidayRate())
+                .deductions(request.getDeductions())
                 .build();
     }
 
-    // PersonalSchedule 엔티티를 CreatePersonalScheduleResult DTO로 변환
     public static PersonalScheduleResponseDTO.CreatePersonalScheduleResult toCreatePersonalScheduleResult(PersonalSchedule personalSchedule) {
         return PersonalScheduleResponseDTO.CreatePersonalScheduleResult.builder()
                 .personalScheduleId(personalSchedule.getId())
                 .memberId(personalSchedule.getMember().getId())
-                .date(personalSchedule.getDate())
+                .name(personalSchedule.getName())
+                .scheduleType(personalSchedule.getScheduleType())
+                .teamId(personalSchedule.getTeam().getId())
                 .startTime(personalSchedule.getStartTime())
                 .endTime(personalSchedule.getEndTime())
-                .title(personalSchedule.getTitle())
                 .memo(personalSchedule.getMemo())
                 .color(personalSchedule.getColor())
+                .hourlyWage(personalSchedule.getHourlyWage())
+                .weeklyAllowance(personalSchedule.getWeeklyAllowance())
+                .nightAllowance(personalSchedule.getNightAllowance())
+                .nightRate(personalSchedule.getNightRate())
+                .overtimeAllowance(personalSchedule.getOvertimeAllowance())
+                .overtimeRate(personalSchedule.getOvertimeRate())
+                .holidayAllowance(personalSchedule.getHolidayAllowance())
+                .holidayRate(personalSchedule.getHolidayRate())
+                .deductions(personalSchedule.getDeductions())
                 .createdAt(personalSchedule.getCreatedAt())
                 .build();
     }
 
-    // PersonalSchedule 엔티티를 PersonalScheduleInfo DTO로 변환
     public static PersonalScheduleResponseDTO.PersonalScheduleInfo toPersonalScheduleInfo(PersonalSchedule personalSchedule) {
         return PersonalScheduleResponseDTO.PersonalScheduleInfo.builder()
                 .personalScheduleId(personalSchedule.getId())
                 .memberId(personalSchedule.getMember().getId())
-                .date(personalSchedule.getDate())
+                .name(personalSchedule.getName())
+                .scheduleType(personalSchedule.getScheduleType())
+                .teamId(personalSchedule.getTeam().getId())
                 .startTime(personalSchedule.getStartTime())
                 .endTime(personalSchedule.getEndTime())
-                .title(personalSchedule.getTitle())
                 .memo(personalSchedule.getMemo())
                 .color(personalSchedule.getColor())
+                .hourlyWage(personalSchedule.getHourlyWage())
+                .weeklyAllowance(personalSchedule.getWeeklyAllowance())
+                .nightAllowance(personalSchedule.getNightAllowance())
+                .nightRate(personalSchedule.getNightRate())
+                .overtimeAllowance(personalSchedule.getOvertimeAllowance())
+                .overtimeRate(personalSchedule.getOvertimeRate())
+                .holidayAllowance(personalSchedule.getHolidayAllowance())
+                .holidayRate(personalSchedule.getHolidayRate())
+                .deductions(personalSchedule.getDeductions())
                 .createdAt(personalSchedule.getCreatedAt())
-                .updatedAt(personalSchedule.getUpdatedAt()) // BaseEntity 상속 시
+                .updatedAt(personalSchedule.getUpdatedAt())
                 .build();
     }
 
-    // PersonalSchedule 리스트와 Member ID를 FindPersonalScheduleResult DTO로 변환
     public static PersonalScheduleResponseDTO.FindPersonalScheduleResult toFindPersonalScheduleResult(
             Long memberId, List<PersonalSchedule> personalSchedules) {
 
         List<PersonalScheduleResponseDTO.PersonalScheduleInfo> scheduleInfoList = personalSchedules.stream()
-                .map(PersonalScheduleConverter::toPersonalScheduleInfo) // 각 엔티티를 Info DTO로 변환
+                .map(PersonalScheduleConverter::toPersonalScheduleInfo)
                 .collect(Collectors.toList());
 
         return PersonalScheduleResponseDTO.FindPersonalScheduleResult.builder()
@@ -69,17 +96,26 @@ public class PersonalScheduleConverter {
                 .build();
     }
 
-    // PersonalSchedule 엔티티를 UpdatePersonalScheduleResult DTO로 변환
     public static PersonalScheduleResponseDTO.UpdatePersonalScheduleResult toUpdatePersonalScheduleResult(PersonalSchedule personalSchedule) {
         return PersonalScheduleResponseDTO.UpdatePersonalScheduleResult.builder()
                 .personalScheduleId(personalSchedule.getId())
                 .memberId(personalSchedule.getMember().getId())
-                .date(personalSchedule.getDate())
+                .name(personalSchedule.getName())
+                .scheduleType(personalSchedule.getScheduleType())
+                .teamId(personalSchedule.getTeam().getId())
                 .startTime(personalSchedule.getStartTime())
                 .endTime(personalSchedule.getEndTime())
-                .title(personalSchedule.getTitle())
                 .memo(personalSchedule.getMemo())
                 .color(personalSchedule.getColor())
+                .hourlyWage(personalSchedule.getHourlyWage())
+                .weeklyAllowance(personalSchedule.getWeeklyAllowance())
+                .nightAllowance(personalSchedule.getNightAllowance())
+                .nightRate(personalSchedule.getNightRate())
+                .overtimeAllowance(personalSchedule.getOvertimeAllowance())
+                .overtimeRate(personalSchedule.getOvertimeRate())
+                .holidayAllowance(personalSchedule.getHolidayAllowance())
+                .holidayRate(personalSchedule.getHolidayRate())
+                .deductions(personalSchedule.getDeductions())
                 .createdAt(personalSchedule.getCreatedAt())
                 .updatedAt(personalSchedule.getUpdatedAt())
                 .build();

@@ -8,7 +8,10 @@ import backend.albago.domain.schedule.domain.repository.PersonalScheduleReposito
 import backend.albago.domain.schedule.dto.PersonalScheduleRequestDTO;
 import backend.albago.domain.schedule.dto.PersonalScheduleResponseDTO;
 import backend.albago.domain.schedule.exception.ScheduleException;
+import backend.albago.domain.team.domain.entity.Team;
+import backend.albago.domain.team.domain.repository.TeamRepository;
 import backend.albago.global.error.code.status.ErrorStatus;
+import backend.albago.global.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ public class PersonalScheduleServiceImpl implements PersonalScheduleService {
 
     private final MemberRepository memberRepository;
     private final PersonalScheduleRepository personalScheduleRepository;
+    private final TeamRepository teamRepository;
 
     @Override
     @Transactional
@@ -35,7 +39,10 @@ public class PersonalScheduleServiceImpl implements PersonalScheduleService {
         Member member = memberRepository.findById(memberIdLong)
                 .orElseThrow(() -> new ScheduleException(ErrorStatus.NO_SUCH_MEMBER));
 
-        PersonalSchedule personalSchedule = PersonalScheduleConverter.toPersonalSchedule(member, request);
+        Team team = teamRepository.findById(request.getTeamId())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.TEAM_NOT_FOUND));
+
+        PersonalSchedule personalSchedule = PersonalScheduleConverter.toPersonalSchedule(member, team, request);
 
         PersonalSchedule savedSchedule = personalScheduleRepository.save(personalSchedule);
 
@@ -55,8 +62,9 @@ public class PersonalScheduleServiceImpl implements PersonalScheduleService {
             throw new ScheduleException(ErrorStatus._BAD_REQUEST);
         }
 
-        List<PersonalSchedule> personalSchedules =
-                personalScheduleRepository.findByMemberIdAndDateBetweenOrderByDateAscStartTimeAsc(memberIdLong, startDate, endDate);
+        List<PersonalSchedule> personalSchedules = personalScheduleRepository.findByMemberIdAndDateRangeOrderByStartTimeAsc(
+                memberIdLong, startDate, endDate
+        );
 
         return PersonalScheduleConverter.toFindPersonalScheduleResult(memberIdLong, personalSchedules);
     }
@@ -77,12 +85,30 @@ public class PersonalScheduleServiceImpl implements PersonalScheduleService {
             throw new ScheduleException(ErrorStatus._FORBIDDEN);
         }
 
-        Optional.ofNullable(request.getDate()).ifPresent(personalSchedule::setDate);
+        Optional.ofNullable(request.getName()).ifPresent(personalSchedule::setName);
+        Optional.ofNullable(request.getScheduleType()).ifPresent(personalSchedule::setScheduleType);
+
+        if (request.getTeamId() != null) {
+            Team newTeam = teamRepository.findById(request.getTeamId())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus.TEAM_NOT_FOUND));
+            personalSchedule.setTeam(newTeam);
+        }
+
         Optional.ofNullable(request.getStartTime()).ifPresent(personalSchedule::setStartTime);
         Optional.ofNullable(request.getEndTime()).ifPresent(personalSchedule::setEndTime);
-        Optional.ofNullable(request.getTitle()).ifPresent(personalSchedule::setTitle);
         Optional.ofNullable(request.getMemo()).ifPresent(personalSchedule::setMemo);
         Optional.ofNullable(request.getColor()).ifPresent(personalSchedule::setColor);
+
+        Optional.ofNullable(request.getHourlyWage()).ifPresent(personalSchedule::setHourlyWage);
+        Optional.ofNullable(request.getWeeklyAllowance()).ifPresent(personalSchedule::setWeeklyAllowance);
+        Optional.ofNullable(request.getNightAllowance()).ifPresent(personalSchedule::setNightAllowance);
+        Optional.ofNullable(request.getNightRate()).ifPresent(personalSchedule::setNightRate);
+        Optional.ofNullable(request.getOvertimeAllowance()).ifPresent(personalSchedule::setOvertimeAllowance);
+        Optional.ofNullable(request.getOvertimeRate()).ifPresent(personalSchedule::setOvertimeRate);
+        Optional.ofNullable(request.getHolidayAllowance()).ifPresent(personalSchedule::setHolidayAllowance);
+        Optional.ofNullable(request.getHolidayRate()).ifPresent(personalSchedule::setHolidayRate);
+        Optional.ofNullable(request.getDeductions()).ifPresent(personalSchedule::setDeductions);
+
 
         personalScheduleRepository.save(personalSchedule);
 
@@ -107,6 +133,4 @@ public class PersonalScheduleServiceImpl implements PersonalScheduleService {
 
         personalScheduleRepository.delete(personalSchedule);
     }
-
-
 }

@@ -7,8 +7,6 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.math.BigDecimal;
-
 @Entity
 @Getter
 @Setter
@@ -35,36 +33,6 @@ public class Team extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     private Member ownerMember;
-
-    private boolean weeklyAllowance;
-
-    private boolean nightAllowance;
-    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
-    private BigDecimal nightRate = BigDecimal.ONE;
-
-    private boolean overtimeAllowance;
-    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
-    private BigDecimal overtimeRate = BigDecimal.ONE;
-
-    private boolean holidayAllowance;
-    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
-    private BigDecimal holidayRate = BigDecimal.ONE;
-
-    @Column(length = 255)
-    private String deductions;
-
-    // 임금 지불 방식
-    @Column(name = "pay_daily", columnDefinition = "DECIMAL(10, 2) default 0.00")
-    private BigDecimal dailyPay = BigDecimal.ZERO;
-
-    @Column(name = "pay_hourly", columnDefinition = "DECIMAL(10, 2) default 0.00")
-    private BigDecimal hourlyPay = BigDecimal.ZERO;
-
-    @Column(name = "pay_weekly", columnDefinition = "DECIMAL(10, 2) default 0.00")
-    private BigDecimal weeklyPay = BigDecimal.ZERO;
-
-    @Column(name = "pay_monthly", columnDefinition = "DECIMAL(10, 2) default 0.00")
-    private BigDecimal monthlyPay = BigDecimal.ZERO;
 
     private Double referenceLatitude;
     private Double referenceLongitude;

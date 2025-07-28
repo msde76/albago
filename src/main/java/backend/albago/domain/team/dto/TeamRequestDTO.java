@@ -17,21 +17,7 @@ public class TeamRequestDTO {
     public static class TeamCreateDTO {
         private String teamName;
         private String imageUrl;
-        private String color; // optional
-
-        private BigDecimal dailyPay;
-        private BigDecimal hourlyPay;
-        private BigDecimal weeklyPay;
-        private BigDecimal monthlyPay;
-
-        private Boolean weeklyAllowance;
-        private Boolean nightAllowance;
-        private BigDecimal nightRate;
-        private Boolean overtimeAllowance;
-        private BigDecimal overtimeRate;
-        private Boolean holidayAllowance;
-        private BigDecimal holidayRate;
-        private String deductions; // 4대 보험 같은 텍스트
+        private String color;
     }
 
     @Getter
@@ -42,20 +28,6 @@ public class TeamRequestDTO {
         private String teamName;
         private String imageUrl;
         private String color;
-
-        private BigDecimal dailyPay;
-        private BigDecimal hourlyPay;
-        private BigDecimal weeklyPay;
-        private BigDecimal monthlyPay;
-
-        private Boolean weeklyAllowance;
-        private Boolean nightAllowance;
-        private BigDecimal nightRate;
-        private Boolean overtimeAllowance;
-        private BigDecimal overtimeRate;
-        private Boolean holidayAllowance;
-        private BigDecimal holidayRate;
-        private String deductions;
     }
 
     @Getter
@@ -68,6 +40,20 @@ public class TeamRequestDTO {
         private BigDecimal salary;
         private Double workHours;
         private Double breakHours;
+        private String color;
+
+        private Boolean weeklyAllowance;
+        private Boolean nightAllowance;
+        private BigDecimal nightRate;
+        private Boolean overtimeAllowance;
+        private BigDecimal overtimeRate;
+        private Boolean holidayAllowance;
+        private BigDecimal holidayRate;
+        private String deductions;
+        private BigDecimal dailyPay;
+        private BigDecimal hourlyPay;
+        private BigDecimal weeklyPay;
+        private BigDecimal monthlyPay;
     }
 
     @Getter
@@ -80,5 +66,18 @@ public class TeamRequestDTO {
         private Double workHours;
         private Double breakHours;
         private String color;
+
+        private Boolean weeklyAllowance;
+        private Boolean nightAllowance;
+        private BigDecimal nightRate;
+        private Boolean overtimeAllowance;
+        private BigDecimal overtimeRate;
+        private Boolean holidayAllowance;
+        private BigDecimal holidayRate;
+        private String deductions;
+        private BigDecimal dailyPay;
+        private BigDecimal hourlyPay;
+        private BigDecimal weeklyPay;
+        private BigDecimal monthlyPay;
     }
 }

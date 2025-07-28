@@ -49,4 +49,38 @@ public class TeamMember extends BaseEntity {
 
     @Column(length = 7)
     private String color;
+
+    // --- Team 엔티티에서 이동된 급여 관련 필드 ---
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean weeklyAllowance = false;
+
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean nightAllowance = false;
+    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
+    private BigDecimal nightRate = BigDecimal.ONE;
+
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean overtimeAllowance = false;
+    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
+    private BigDecimal overtimeRate = BigDecimal.ONE;
+
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean holidayAllowance = false;
+    @Column(columnDefinition = "DECIMAL(5, 2) default 1.00")
+    private BigDecimal holidayRate = BigDecimal.ONE;
+
+    @Column(length = 255)
+    private String deductions; // null 허용 (기본값 설정 불필요)
+
+    @Column(name = "pay_daily", columnDefinition = "DECIMAL(10, 2) default 0.00")
+    private BigDecimal dailyPay = BigDecimal.ZERO;
+
+    @Column(name = "pay_hourly", columnDefinition = "DECIMAL(10, 2) default 0.00")
+    private BigDecimal hourlyPay = BigDecimal.ZERO;
+
+    @Column(name = "pay_weekly", columnDefinition = "DECIMAL(10, 2) default 0.00")
+    private BigDecimal weeklyPay = BigDecimal.ZERO;
+
+    @Column(name = "pay_monthly", columnDefinition = "DECIMAL(10, 2) default 0.00")
+    private BigDecimal monthlyPay = BigDecimal.ZERO;
 }

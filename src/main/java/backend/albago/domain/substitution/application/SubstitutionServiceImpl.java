@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -148,15 +147,12 @@ public class SubstitutionServiceImpl implements SubstitutionService {
 
         acceptedRequest.setStatus(RequestStatus.ACCEPTED);
         acceptedRequest.setSubstitute(substituteMember);
-        // substitutionRequestRepository.save(acceptedRequest); // @Transactional이므로 자동 저장
 
         LocalDateTime requestStart = acceptedRequest.getTimeRangeStart();
         LocalDateTime requestEnd = acceptedRequest.getTimeRangeEnd();
-        LocalDate requestDate = requestStart.toLocalDate();
-        LocalTime requestStartTime = requestStart.toLocalTime();
-        LocalTime requestEndTime = requestEnd.toLocalTime();
+        LocalDate requestDate = requestStart.toLocalDate(); // 날짜 부분 추출
 
-
+        // 1. 겹치는 대타 요청 취소
         List<SubstitutionRequest> requesterOverlappingPendingRequests = substitutionRequestRepository.findPendingOverlappingRequestsForMember(
                 team, acceptedRequest.getRequester(), requestStart, requestEnd
         );
@@ -183,54 +179,82 @@ public class SubstitutionServiceImpl implements SubstitutionService {
             log.info("Substitute {}'s overlapping pending substitution requests (IDs: {}) canceled.", substituteMember.getId(), substituteRequestIdsToCancel);
         }
 
+        // 2. 원본 팀 스케줄 찾기 (요청자가 원래 근무하기로 되어있던 스케줄)
+        List<TeamSchedule> originalRequesterTeamSchedules = teamScheduleRepository.findOverlappingSchedulesForTeamMember(
+                team, requestDate, acceptedRequest.getRequester(), requestStart, requestEnd
+        );
+
+        // 원본 스케줄 중 하나를 기준으로 급여 정보를 가져옴 (여러 개 겹칠 경우 가장 적절한 것을 선택하는 로직 필요)
+        TeamSchedule originalTeamSchedule = originalRequesterTeamSchedules.stream().findFirst().orElse(null);
+
         // 3. 개인 시간표 반영 (기존 스케줄 조정 및 새 스케줄 생성)
         // 3-1. 요청자 (원래 근무자)의 개인 시간표에서 해당 근무를 삭제하거나 변경
-        List<PersonalSchedule> requesterConflictingSchedules = personalScheduleRepository.findOverlappingSchedulesForMember(
-                acceptedRequest.getRequester(), requestDate, requestStartTime, requestEndTime
+        List<PersonalSchedule> requesterConflictingPersonalSchedules = personalScheduleRepository.findOverlappingSchedulesForMember(
+                acceptedRequest.getRequester(), requestDate, requestStart, requestEnd
         );
-        if (!requesterConflictingSchedules.isEmpty()) {
-            personalScheduleRepository.deleteAll(requesterConflictingSchedules);
-            log.info("Requester {}'s original conflicting schedules deleted for substitution request ID {}.", acceptedRequest.getRequester().getId(), acceptedRequest.getId());
+        if (!requesterConflictingPersonalSchedules.isEmpty()) {
+            personalScheduleRepository.deleteAll(requesterConflictingPersonalSchedules);
+            log.info("Requester {}'s original conflicting personal schedules deleted for substitution request ID {}.", acceptedRequest.getRequester().getId(), acceptedRequest.getId());
         }
 
         // 3-2. 대타자 (새로운 근무자)의 개인 시간표에 새로운 근무 스케줄 추가
         PersonalSchedule newSubstitutePersonalSchedule = PersonalSchedule.builder()
                 .member(substituteMember)
-                .date(requestDate)
-                .startTime(requestStartTime)
-                .endTime(requestEndTime)
-                .title("대타 근무 (요청자: " + acceptedRequest.getRequester().getName() + ")")
+                .team(team)
+                .scheduleType("team")
+                .startTime(requestStart)
+                .endTime(requestEnd)
+                .name("대타 근무 (요청자: " + acceptedRequest.getRequester().getName() + ")")
                 .memo("대타 요청 ID: " + acceptedRequest.getId())
                 .color(acceptedRequest.getTeam().getColor())
-                .teamScheduleId(acceptedRequest.getId())
+                .relatedTeamScheduleId(originalTeamSchedule != null ? originalTeamSchedule.getId() : null)
+
+                // 급여 정보 복사
+                .hourlyWage(originalTeamSchedule != null ? originalTeamSchedule.getScheduleHourlyWage() : null)
+                .weeklyAllowance(originalTeamSchedule != null ? originalTeamSchedule.getWeeklyAllowance() : null)
+                .nightAllowance(originalTeamSchedule != null ? originalTeamSchedule.getNightAllowance() : null)
+                .nightRate(originalTeamSchedule != null ? originalTeamSchedule.getNightRate() : null)
+                .overtimeAllowance(originalTeamSchedule != null ? originalTeamSchedule.getOvertimeAllowance() : null)
+                .overtimeRate(originalTeamSchedule != null ? originalTeamSchedule.getOvertimeRate() : null)
+                .holidayAllowance(originalTeamSchedule != null ? originalTeamSchedule.getHolidayAllowance() : null)
+                .holidayRate(originalTeamSchedule != null ? originalTeamSchedule.getHolidayRate() : null)
+                .deductions(originalTeamSchedule != null ? originalTeamSchedule.getDeductions() : null)
                 .build();
         personalScheduleRepository.save(newSubstitutePersonalSchedule);
         log.info("Substitute {}'s new personal schedule created for substitution request ID {}.", substituteMember.getId(), acceptedRequest.getId());
 
-        // 3-3. 팀 시간표 반영
-        // 요청자 (원래 근무자)의 팀 스케줄에서 해당 근무를 변경하거나 삭제
-        List<TeamSchedule> requesterTeamConflictingSchedules = teamScheduleRepository.findOverlappingSchedulesForTeamMember(
-                team, requestDate, acceptedRequest.getRequester(), requestStartTime, requestEndTime
-        );
 
-        if (!requesterTeamConflictingSchedules.isEmpty()) {
-            teamScheduleRepository.deleteAll(requesterTeamConflictingSchedules);
+        // 4. 팀 시간표 반영 (원래 근무자 스케줄 변경 또는 삭제, 새 근무자 스케줄 생성)
+        // 4-1. 요청자 (원래 근무자)의 팀 스케줄에서 해당 근무를 삭제하거나 변경
+        if (!originalRequesterTeamSchedules.isEmpty()) {
+            teamScheduleRepository.deleteAll(originalRequesterTeamSchedules); // 삭제
             log.info("Requester {}'s original conflicting team schedules deleted for substitution request ID {}.", acceptedRequest.getRequester().getId(), acceptedRequest.getId());
         }
 
-        // 대타자 (새로운 근무자)의 팀 시간표에 새로운 근무 스케줄 추가
+        // 4-2. 대타자 (새로운 근무자)의 팀 시간표에 새로운 근무 스케줄 추가
         TeamSchedule newSubstituteTeamSchedule = TeamSchedule.builder()
                 .team(team)
                 .member(substituteMember)
-                .date(requestDate)
-                .startTime(requestStartTime)
-                .endTime(requestEndTime)
-                .title("대타 근무 (요청자: " + acceptedRequest.getRequester().getName() + ")")
+                .startTime(requestStart)
+                .endTime(requestEnd)
+                .name("대타 근무 (요청자: " + acceptedRequest.getRequester().getName() + ")")
                 .memo("대타 요청 ID: " + acceptedRequest.getId())
                 .color(acceptedRequest.getTeam().getColor())
+
+                // 급여 정보 복사
+                .scheduleHourlyWage(originalTeamSchedule != null ? originalTeamSchedule.getScheduleHourlyWage() : null)
+                .weeklyAllowance(originalTeamSchedule != null ? originalTeamSchedule.getWeeklyAllowance() : null)
+                .nightAllowance(originalTeamSchedule != null ? originalTeamSchedule.getNightAllowance() : null)
+                .nightRate(originalTeamSchedule != null ? originalTeamSchedule.getNightRate() : null)
+                .overtimeAllowance(originalTeamSchedule != null ? originalTeamSchedule.getOvertimeAllowance() : null)
+                .overtimeRate(originalTeamSchedule != null ? originalTeamSchedule.getOvertimeRate() : null)
+                .holidayAllowance(originalTeamSchedule != null ? originalTeamSchedule.getHolidayAllowance() : null)
+                .holidayRate(originalTeamSchedule != null ? originalTeamSchedule.getHolidayRate() : null)
+                .deductions(originalTeamSchedule != null ? originalTeamSchedule.getDeductions() : null)
                 .build();
         teamScheduleRepository.save(newSubstituteTeamSchedule);
         log.info("Substitute {}'s new team schedule created for substitution request ID {}.", substituteMember.getId(), acceptedRequest.getId());
+
 
         return SubstitutionConverter.toAcceptSubstitutionResult(acceptedRequest);
     }
@@ -282,9 +306,6 @@ public class SubstitutionServiceImpl implements SubstitutionService {
         LocalDateTime requestStartDateTime = requestDTO.getTimeRangeStart();
         LocalDateTime requestEndDateTime = requestDTO.getTimeRangeEnd();
         LocalDate requestDate = requestStartDateTime.toLocalDate();
-        LocalTime requestStartTime = requestStartDateTime.toLocalTime();
-        LocalTime requestEndTime = requestEndDateTime.toLocalTime();
-
 
         if (requestStartDateTime.isAfter(requestEndDateTime) || requestStartDateTime.isBefore(LocalDateTime.now())) {
             throw new SubstitutionException(ErrorStatus.INVALID_SUBSTITUTION_TIME);
@@ -304,9 +325,10 @@ public class SubstitutionServiceImpl implements SubstitutionService {
                 continue;
             }
 
-            // 2-2. 해당 멤버의 개인 시간표 중 겹치는 것이 있는지 확인 (대타 요청 검증 로직 제거)
+            // 2-2. 해당 멤버의 개인 시간표 중 겹치는 것이 있는지 확인
+            // PersonalScheduleRepository의 findOverlappingSchedulesForMember 메서드 시그니처 변경에 따라 LocalDateTime으로 전달
             List<PersonalSchedule> conflictingSchedules = personalScheduleRepository.findOverlappingSchedulesForMember(
-                    member, requestDate, requestStartTime, requestEndTime
+                    member, requestDate, requestStartDateTime, requestEndDateTime
             );
 
             // 겹치는 개인 시간표가 없으면 대타 가능 멤버에 추가

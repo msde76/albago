@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class TeamScheduleRequestDTO {
 
@@ -16,10 +16,9 @@ public class TeamScheduleRequestDTO {
     @Builder
     public static class CreateTeamScheduleDTO {
         private Long memberId;
-        private LocalDate date;
-        private LocalTime startTime;
-        private LocalTime endTime;
-        private String title;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private String name;
         private String memo;
         private String color;
     }
@@ -31,11 +30,20 @@ public class TeamScheduleRequestDTO {
     @Builder
     public static class UpdateTeamScheduleDTO {
         private Long memberId;
-        private LocalDate date;
-        private LocalTime startTime;
-        private LocalTime endTime;
-        private String title;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private String name;
         private String memo;
         private String color;
+
+        private BigDecimal scheduleHourlyWage;
+        private Boolean weeklyAllowance;
+        private Boolean nightAllowance;
+        private BigDecimal nightRate;
+        private Boolean overtimeAllowance;
+        private BigDecimal overtimeRate;
+        private Boolean holidayAllowance;
+        private BigDecimal holidayRate;
+        private String deductions;
     }
 }

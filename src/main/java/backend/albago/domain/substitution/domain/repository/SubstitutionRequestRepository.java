@@ -23,17 +23,6 @@ public interface SubstitutionRequestRepository extends JpaRepository<Substitutio
 
     Optional<SubstitutionRequest> findByTeamAndId(Team team, Long id);
 
-    // 특정 멤버의 주어진 시간 범위와 겹치는 개인 시간표 조회
-    @Query("SELECT ps FROM PersonalSchedule ps WHERE ps.member = :member " +
-            "AND ps.date = :date " +
-            "AND ((ps.startTime < :endTime AND ps.endTime > :startTime))")
-    List<PersonalSchedule> findConflictingSchedulesForMember(
-            @Param("member") Member member,
-            @Param("date") LocalDate date,
-            @Param("startTime") LocalTime startTime,
-            @Param("endTime") LocalTime endTime
-    );
-
     // 주어진 시간 범위와 겹치고 PENDING 상태인 대타 요청 조회
     @Query("SELECT sr FROM SubstitutionRequest sr WHERE sr.team = :team " +
             "AND (sr.requester = :member OR sr.substitute = :member) " +
