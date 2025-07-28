@@ -1,7 +1,6 @@
 package backend.albago.domain.substitution.domain.repository;
 
 import backend.albago.domain.member.domain.entity.Member;
-import backend.albago.domain.schedule.domain.entity.PersonalSchedule;
 import backend.albago.domain.substitution.domain.entity.SubstitutionRequest;
 import backend.albago.domain.team.domain.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,9 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 

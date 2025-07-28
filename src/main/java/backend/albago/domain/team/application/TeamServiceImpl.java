@@ -307,7 +307,7 @@ public class TeamServiceImpl implements TeamService {
         TeamMember teamMemberToReject = teamMemberRepository.findById(teamMemberId)
                 .orElseThrow(() -> new TeamException(ErrorStatus.TEAM_MEMBER_NOT_FOUND));
 
-        Team targetTeam = teamRepository.findById(teamId)
+        teamRepository.findById(teamId)
                 .orElseThrow(() -> new TeamException(ErrorStatus.TEAM_NOT_FOUND));
 
         if (!teamMemberToReject.getTeam().getId().equals(teamId)) {
