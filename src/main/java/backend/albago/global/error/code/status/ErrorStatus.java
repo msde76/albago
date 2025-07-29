@@ -71,6 +71,13 @@ public enum ErrorStatus implements BaseErrorCode {
     REQUESTER_NOT_IN_TEAM(HttpStatus.FORBIDDEN, "SUBSTITUTION_4007", "요청자가 해당 팀에 소속되지 않았습니다."),
     SUBSTITUTE_NOT_IN_TEAM(HttpStatus.FORBIDDEN, "SUBSTITUTION_4008", "대타자가 해당 팀에 소속되지 않았습니다."),
 
+    // Memo
+    MEMO_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMO_4001", "해당 메모를 찾을 수 없습니다."),
+    NOT_MY_MEMO(HttpStatus.FORBIDDEN, "MEMO_4002", "해당 메모에 대한 권한이 없습니다."),
+    MEMO_CONTENT_EMPTY(HttpStatus.BAD_REQUEST, "MEMO_4003", "메모 내용은 비워둘 수 없습니다."),
+    MEMO_DATE_EMPTY(HttpStatus.BAD_REQUEST, "MEMO_4004", "메모 날짜는 비워둘 수 없습니다."),
+    NOT_MY_SCHEDULE(HttpStatus.FORBIDDEN, "MEMO_4005", "해당 스케줄에 대한 권한이 없습니다."),
+
     // Category
     NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST, "CLOTH_4003", "카테고리가 존재하지 않습니다."),
 

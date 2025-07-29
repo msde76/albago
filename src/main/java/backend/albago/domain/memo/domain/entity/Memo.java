@@ -2,6 +2,7 @@ package backend.albago.domain.memo.domain.entity;
 
 import backend.albago.domain.member.domain.entity.Member;
 import backend.albago.domain.model.entity.BaseEntity;
+import backend.albago.domain.schedule.domain.entity.PersonalSchedule;
 import backend.albago.domain.team.domain.entity.Team;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,10 @@ public class Memo extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personalSchedule_id")
+    private PersonalSchedule personalSchedule;
 
     @Lob
     @Column(nullable = false)

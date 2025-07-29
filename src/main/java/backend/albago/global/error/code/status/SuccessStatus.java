@@ -87,6 +87,13 @@ public enum SuccessStatus implements BaseCode {
     SUBSTITUTION_DELETE(HttpStatus.OK, "SUBSTITUTION_206", "대타 요청이 성공적으로 취소되었습니다."),
     SUBSTITUTION_AVAILABILITY_CHECKED(HttpStatus.OK, "SUBSTITUTION_207", "대타 가능 인원이 성공적으로 조회되었습니다."),
 
+    // Memo
+    MEMO_CREATED(HttpStatus.CREATED, "MEMO_200", "메모가 성공적으로 작성되었습니다."),
+    MEMOS_FINED(HttpStatus.OK, "MEMO_200", "메모가 성공적으로 작성되었습니다."),
+    MEMO_FINED(HttpStatus.OK, "MEMO_200", "메모가 성공적으로 작성되었습니다."),
+    MEMO_UPDATE(HttpStatus.OK, "MEMO_200", "메모가 성공적으로 작성되었습니다."),
+    MEMO_DELETE(HttpStatus.OK, "MEMO_200", "메모가 성공적으로 작성되었습니다."),
+
     //Cloth
     CLOTH_VIEW_SUCCESS(HttpStatus.OK,"CLOTH_200","옷이 성공적으로 조회되었습니다."),
     CLOTH_CREATED(HttpStatus.CREATED, "CLOTH_201"," 옷이 성공적으로 생성되었습니다."),
