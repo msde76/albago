@@ -133,4 +133,18 @@ public class PersonalScheduleServiceImpl implements PersonalScheduleService {
 
         personalScheduleRepository.delete(personalSchedule);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PersonalScheduleResponseDTO.FindAllPersonalScheduleResult findAllPersonalSchedule(String memberIdString) {
+
+        Long memberId = Long.parseLong(memberIdString);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.NO_SUCH_MEMBER));
+
+        List<PersonalSchedule> personalSchedules = personalScheduleRepository.findByMemberOrderByStartTimeDesc(member);
+
+        return PersonalScheduleConverter.toFindAllPersonalScheduleResult(member, personalSchedules);
+    }
 }

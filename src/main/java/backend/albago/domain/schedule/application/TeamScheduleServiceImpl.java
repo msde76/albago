@@ -244,6 +244,28 @@ public class TeamScheduleServiceImpl implements TeamScheduleService {
         teamScheduleRepository.delete(teamScheduleToDelete);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public TeamScheduleResponseDTO.FindAllTeamScheduleResult findAllTeamSchedule(Long teamId, String requestMemberIdString) {
+
+        Long requestMemberId = Long.parseLong(requestMemberIdString);
+
+        Member requestMember = memberRepository.findById(requestMemberId)
+                .orElseThrow(() -> new ScheduleException(ErrorStatus.NO_SUCH_MEMBER));
+
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new ScheduleException(ErrorStatus.TEAM_NOT_FOUND));
+
+        boolean isMemberOfTeam = teamMemberRepository.existsByTeamAndMember(team, requestMember);
+        if (!isMemberOfTeam) {
+            throw new ScheduleException(ErrorStatus.MEMBER_NOT_IN_TEAM);
+        }
+
+        List<TeamSchedule> teamSchedules = teamScheduleRepository.findByTeamOrderByStartTimeDesc(team);
+
+        return TeamScheduleConverter.toFindAllTeamScheduleResult(teamId, teamSchedules);
+    }
+
     // 개인 스케줄 생성 헬퍼 메서드
     private void createAndSavePersonalSchedule(Member member, TeamSchedule teamSchedule) {
         PersonalSchedule personalSchedule = PersonalSchedule.builder()

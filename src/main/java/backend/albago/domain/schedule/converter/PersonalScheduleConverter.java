@@ -5,7 +5,6 @@ import backend.albago.domain.schedule.domain.entity.PersonalSchedule;
 import backend.albago.domain.schedule.dto.PersonalScheduleRequestDTO;
 import backend.albago.domain.schedule.dto.PersonalScheduleResponseDTO;
 import backend.albago.domain.team.domain.entity.Team;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,7 @@ public class PersonalScheduleConverter {
                 .memberId(personalSchedule.getMember().getId())
                 .name(personalSchedule.getName())
                 .scheduleType(personalSchedule.getScheduleType())
-                .teamId(personalSchedule.getTeam().getId())
+                .teamId(personalSchedule.getTeam() != null ? personalSchedule.getTeam().getId() : null)
                 .startTime(personalSchedule.getStartTime())
                 .endTime(personalSchedule.getEndTime())
                 .memo(personalSchedule.getMemo())
@@ -63,7 +62,7 @@ public class PersonalScheduleConverter {
                 .memberId(personalSchedule.getMember().getId())
                 .name(personalSchedule.getName())
                 .scheduleType(personalSchedule.getScheduleType())
-                .teamId(personalSchedule.getTeam().getId())
+                .teamId(personalSchedule.getTeam() != null ? personalSchedule.getTeam().getId() : null)
                 .startTime(personalSchedule.getStartTime())
                 .endTime(personalSchedule.getEndTime())
                 .memo(personalSchedule.getMemo())
@@ -102,7 +101,7 @@ public class PersonalScheduleConverter {
                 .memberId(personalSchedule.getMember().getId())
                 .name(personalSchedule.getName())
                 .scheduleType(personalSchedule.getScheduleType())
-                .teamId(personalSchedule.getTeam().getId())
+                .teamId(personalSchedule.getTeam() != null ? personalSchedule.getTeam().getId() : null)
                 .startTime(personalSchedule.getStartTime())
                 .endTime(personalSchedule.getEndTime())
                 .memo(personalSchedule.getMemo())
@@ -118,6 +117,18 @@ public class PersonalScheduleConverter {
                 .deductions(personalSchedule.getDeductions())
                 .createdAt(personalSchedule.getCreatedAt())
                 .updatedAt(personalSchedule.getUpdatedAt())
+                .build();
+    }
+
+    public static PersonalScheduleResponseDTO.FindAllPersonalScheduleResult toFindAllPersonalScheduleResult(Member member, List<PersonalSchedule> schedules) {
+        List<PersonalScheduleResponseDTO.PersonalScheduleInfo> personalScheduleInfoList = schedules.stream()
+                .map(PersonalScheduleConverter::toPersonalScheduleInfo)
+                .collect(Collectors.toList());
+
+        return PersonalScheduleResponseDTO.FindAllPersonalScheduleResult.builder()
+                .memberId(member.getId())
+                .personalSchedules(personalScheduleInfoList)
+                .totalCount(personalScheduleInfoList.size())
                 .build();
     }
 }

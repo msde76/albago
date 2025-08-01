@@ -92,7 +92,7 @@ public class TeamScheduleConverter {
                 .build();
     }
 
-    // TeamSchedule 엔티티를 TeamScheduleInfo DTO로 변환
+    // TeamSchedule 엔티티를 TeamScheduleInfo DTO로 변환 (중복 제거 후 단일 버전)
     public static TeamScheduleResponseDTO.TeamScheduleInfo toTeamScheduleInfo(TeamSchedule teamSchedule) {
         Long memberId = Optional.ofNullable(teamSchedule.getMember()).map(Member::getId).orElse(null);
         String memberName = Optional.ofNullable(teamSchedule.getMember()).map(Member::getName).orElse(null);
@@ -168,6 +168,21 @@ public class TeamScheduleConverter {
                 .hourlyPay(teamSchedule.getHourlyPay())
                 .weeklyPay(teamSchedule.getWeeklyPay())
                 .monthlyPay(teamSchedule.getMonthlyPay())
+                .build();
+    }
+
+    // TeamSchedule 리스트를 FindAllTeamScheduleResult DTO로 변환
+    public static TeamScheduleResponseDTO.FindAllTeamScheduleResult toFindAllTeamScheduleResult(
+            Long teamId, List<TeamSchedule> teamSchedules) {
+
+        List<TeamScheduleResponseDTO.TeamScheduleInfo> scheduleInfoList = teamSchedules.stream()
+                .map(TeamScheduleConverter::toTeamScheduleInfo)
+                .collect(Collectors.toList());
+
+        return TeamScheduleResponseDTO.FindAllTeamScheduleResult.builder()
+                .teamId(teamId)
+                .teamSchedules(scheduleInfoList)
+                .totalCount(scheduleInfoList.size())
                 .build();
     }
 }

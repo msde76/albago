@@ -72,4 +72,16 @@ public class PersonalScheduleRestController {
         personalScheduleService.deletePersonalSchedule(scheduleId, memberId);
         return BaseResponse.onSuccess(SuccessStatus.PERSONAL_SCHEDULE_DELETE, null);
     }
+
+    @GetMapping("/personal/schedules")
+    @Operation(summary = "모든 개인 스케줄 조회 API", description = "사용자의 모든 개인 스케줄 조회")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "SCHEDULE_204", description = "OK, 성공적으로 수정되었습니다.")
+    })
+    public BaseResponse<PersonalScheduleResponseDTO.FindAllPersonalScheduleResult> findAllPersonalSchedule(
+            @RequestHeader(value = "member-id") String memberId
+    ) {
+        PersonalScheduleResponseDTO.FindAllPersonalScheduleResult result = personalScheduleService.findAllPersonalSchedule(memberId);
+        return BaseResponse.onSuccess(SuccessStatus.PERSONAL_SCHEDULE_ALL_FOUND, result);
+    }
 }

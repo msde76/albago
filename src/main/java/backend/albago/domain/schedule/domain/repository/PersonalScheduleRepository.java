@@ -35,4 +35,6 @@ public interface PersonalScheduleRepository extends JpaRepository<PersonalSchedu
     );
 
     Optional<PersonalSchedule> findByRelatedTeamScheduleId(Long relatedTeamScheduleId);
+
+    List<PersonalSchedule> findByMemberOrderByStartTimeDesc(Member member);
 }

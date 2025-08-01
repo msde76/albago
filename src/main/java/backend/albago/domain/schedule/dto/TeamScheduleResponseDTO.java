@@ -116,4 +116,14 @@ public class TeamScheduleResponseDTO {
         private BigDecimal weeklyPay;
         private BigDecimal monthlyPay;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class FindAllTeamScheduleResult {
+        private Long teamId;
+        private List<TeamScheduleInfo> teamSchedules;
+        private Integer totalCount;
+    }
 }

@@ -103,4 +103,14 @@ public class PersonalScheduleResponseDTO {
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class FindAllPersonalScheduleResult {
+        private Long memberId;
+        private List<PersonalScheduleInfo> personalSchedules;
+        private Integer totalCount;
+    }
 }

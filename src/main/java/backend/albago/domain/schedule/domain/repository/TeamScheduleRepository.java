@@ -30,4 +30,6 @@ public interface TeamScheduleRepository extends JpaRepository<TeamSchedule,Long>
             @Param("startDateTime") LocalDateTime startDateTime,
             @Param("endDateTime") LocalDateTime endDateTime
     );
+
+    List<TeamSchedule> findByTeamOrderByStartTimeDesc(Team team);
 }

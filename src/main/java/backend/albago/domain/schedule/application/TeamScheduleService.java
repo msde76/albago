@@ -28,4 +28,7 @@ public interface TeamScheduleService {
             Long teamId,
             Long teamScheduleId,
             String requestMemberId);
+
+    TeamScheduleResponseDTO.FindAllTeamScheduleResult findAllTeamSchedule(Long teamId, String requestMemberId);
+
 }

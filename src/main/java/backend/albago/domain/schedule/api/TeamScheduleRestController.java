@@ -76,4 +76,17 @@ public class TeamScheduleRestController {
         teamScheduleService.deleteTeamSchedule(teamId, teamScheduleId, requestMemberId);
         return BaseResponse.onSuccess(SuccessStatus.TEAM_SCHEDULE_DELETE, null);
     }
+
+    @GetMapping("/{teamId}/all")
+    @Operation(summary = "팀 스케줄 수정 API", description = "특정 팀의 스케줄 수정")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공적으로 수정되었습니다.")
+    })
+    public BaseResponse<TeamScheduleResponseDTO.FindAllTeamScheduleResult> findAllTeamSchedule(
+            @PathVariable(value = "teamId") Long teamId,
+            @RequestHeader(value = "member-id") String requestMemberId
+    ) {
+        TeamScheduleResponseDTO.FindAllTeamScheduleResult result = teamScheduleService.findAllTeamSchedule(teamId, requestMemberId);
+        return BaseResponse.onSuccess(SuccessStatus.TEAM_SCHEDULE_ALL_FOUND, result);
+    }
 }

@@ -78,6 +78,10 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMO_DATE_EMPTY(HttpStatus.BAD_REQUEST, "MEMO_4004", "메모 날짜는 비워둘 수 없습니다."),
     NOT_MY_SCHEDULE(HttpStatus.FORBIDDEN, "MEMO_4005", "해당 스케줄에 대한 권한이 없습니다."),
 
+    // Member
+    MEMBER_UNAUTHORIZED(HttpStatus.FORBIDDEN, "MEMBER_4003", "해당 사용자에 대한 권한이 없습니다."),
+    MEMBER_ALREADY_EXIST(HttpStatus.CONFLICT, "MEMBER_4009", "이미 존재하는 사용자입니다."),
+
     // Category
     NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST, "CLOTH_4003", "카테고리가 존재하지 않습니다."),
 

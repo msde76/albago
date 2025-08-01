@@ -15,4 +15,5 @@ public interface PersonalScheduleService {
 
     void deletePersonalSchedule(Long scheduleId, String memberId);
 
+    PersonalScheduleResponseDTO.FindAllPersonalScheduleResult findAllPersonalSchedule(String memberId);
 }

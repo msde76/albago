@@ -23,17 +23,20 @@ public enum SuccessStatus implements BaseCode {
     TEAM_INVITE_ACCEPT(HttpStatus.OK, "TEAM_208", "초대가 성공적으로 수락되었습니다."),
     TEAM_INVITE_REJECT(HttpStatus.OK, "TEAM_209", "초대가 성공적으로 거절되었습니다."),
 
-    // Schedule
+    // Personal Schedule
     PERSONAL_SCHEDULE_CREATED(HttpStatus.CREATED, "SCHEDULE_200", "개인 스케줄이 성공적으로 생성되었습니다."),
     PERSONAL_SCHEDULE_FOUND(HttpStatus.OK, "SCHEDULE_201", "특정 기간의 개인 스케줄이 성공적으로 조회되었습니다."),
     PERSONAL_SCHEDULE_UPDATE(HttpStatus.OK, "SCHEDULE_202", "개인 스케줄이 성공적으로 수정되었습니다."),
     PERSONAL_SCHEDULE_DELETE(HttpStatus.OK, "SCHEDULE_203", "개인 스케줄이 성공적으로 삭제되었습니다."),
+    PERSONAL_SCHEDULE_ALL_FOUND(HttpStatus.OK, "SCHEDULE_204", "모든 개인 스케줄이 성공적으로 조회되었습니다."),
 
     // Team Schedule
     TEAM_SCHEDULE_CREATED(HttpStatus.CREATED, "SCHEDULE_2005", "팀 스케줄이 성공적으로 생성되었습니다."),
     TEAM_SCHEDULE_FOUND(HttpStatus.OK, "SCHEDULE_2006", "팀 스케줄을 성공적으로 조회했습니다."),
     TEAM_SCHEDULE_UPDATE(HttpStatus.OK, "SCHEDULE_2007", "팀 스케줄이 성공적으로 수정되었습니다."),
     TEAM_SCHEDULE_DELETE(HttpStatus.OK, "SCHEDULE_2008", "팀 스케줄이 성공적으로 삭제되었습니다."),
+    TEAM_SCHEDULE_ALL_FOUND(HttpStatus.OK, "SCHEDULE_2009", "모든 팀 스케줄이 성공적으로 조회되었습니다."),
+
 
     // Notification
     NOTIFICATION_FOUND(HttpStatus.OK, "SCHEDULE_200", "알람 목록이 성공적으로 조회되었습니다."),
@@ -93,6 +96,13 @@ public enum SuccessStatus implements BaseCode {
     MEMO_FINED(HttpStatus.OK, "MEMO_200", "메모가 성공적으로 작성되었습니다."),
     MEMO_UPDATE(HttpStatus.OK, "MEMO_200", "메모가 성공적으로 작성되었습니다."),
     MEMO_DELETE(HttpStatus.OK, "MEMO_200", "메모가 성공적으로 작성되었습니다."),
+
+    // Member
+    MEMBER_FOUND(HttpStatus.FOUND, "MEMBER_200", "멤버가 성공적으로 조회되었습니다."),
+    MEMBER_CREATED(HttpStatus.CREATED, "MEMBER_201", "멤버가 성공적으로 생성되었습니다."),
+    MEMBER_UPDATE(HttpStatus.OK, "MEMBER_202", "멤버가 성공적으로 수정되었습니다."),
+    MEMBER_DELETE(HttpStatus.OK, "MEMBER_203", "멤버가 성공적으로 삭제되었습니다."),
+    ME_FOUND(HttpStatus.FOUND, "MEMBER_204", "자신의 정보가 성공적으로 조회되었습니다."),
 
     //Cloth
     CLOTH_VIEW_SUCCESS(HttpStatus.OK,"CLOTH_200","옷이 성공적으로 조회되었습니다."),
